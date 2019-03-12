@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
-import SearchBar from 'material-ui-search-bar';
 import { withStyles } from '@material-ui/core/styles';
 
 import RecipeCardComponent2 from '../../components/cards/card.component';
@@ -12,8 +11,6 @@ import RecipeCardComponent2 from '../../components/cards/card.component';
  */
 class RecipesPageContainer extends Component {
   render() {
-    const { classes } = this.props;
-
     return (
         <div className="card-deck-container">
           <Grid container spacing={12}>

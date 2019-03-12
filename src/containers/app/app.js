@@ -127,6 +127,7 @@ class App extends React.Component {
 const styles = theme => ({
   root: {
     display: 'flex',
+    width: '100%',
   },
   content: {
     flexGrow: 1,
