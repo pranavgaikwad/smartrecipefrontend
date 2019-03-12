@@ -52,6 +52,13 @@ class MenuComponent extends React.Component {
             <Typography variant="h6" color="inherit" noWrap>
               {title}
             </Typography>
+            <SearchBar
+              style={{
+                marginLeft: '10%',
+                // marginLeft: '5',
+                maxWidth: '40%',
+              }}
+            />
           </Toolbar>
         </AppBar>
         

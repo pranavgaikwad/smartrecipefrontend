@@ -16,12 +16,6 @@ class RecipesPageContainer extends Component {
 
     return (
         <div className="card-deck-container">
-          <SearchBar
-            style={{
-              margin: '0 auto',
-              maxWidth: 800,
-            }}
-          />
           <Grid container spacing={12}>
             <Grid item sm>
               <RecipeCardComponent2 title="Sample Recipe 1" description="Sample Description 1"/>
