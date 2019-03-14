@@ -1,14 +1,14 @@
 import thunk from 'redux-thunk';
 import { createStore as createReduxStore, applyMiddleware } from 'redux';
 
-import storage from 'redux-persist/lib/storage';
+import sessionStorage from 'redux-persist/lib/storage/session';
 import { persistReducer } from 'redux-persist';
 
 import rootReducer from './reducers';
 
 const persistConfig = {
   key: 'root',
-  storage,
+  storage: sessionStorage,
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
