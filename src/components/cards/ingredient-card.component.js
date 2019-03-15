@@ -1,26 +1,58 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Card from '@material-ui/core/Card';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
+import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
-import CardActions from '@material-ui/core/CardActions';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CardContent from '@material-ui/core/CardContent';
 
+const menuOptions = ['Edit', 'Delete'];
 
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
+const MENU_ITEM_HEIGHT = 48;
 
 /**
  * Generic card component to show an ingredient
  */
 class IngredientCardComponent extends Component {
-  render(){
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      anchorEl: null,
+    }
+
+    this.onMenuOpened = this.onMenuOpened.bind(this);
+    this.onMenuClosed = this.onMenuClosed.bind(this);
+  }
+  
+  onMenuOpened(e) {
+    this.setState({ anchorEl: e.currentTarget });
+  }
+
+  onMenuClosed(option, id) {
+    const { onEditButtonClicked } = this.props;
+
+    switch(option) {
+      case menuOptions[0]:
+        onEditButtonClicked(id);
+        break;
+      case menuOptions[1]:
+        break;
+      default:
+        break;
+    }
+
+    this.setState({ anchorEl: null });
+  }
+
+  render(){
     const {
       classes,
       ingredient,
-      onEditButtonClicked,
     } = this.props;
 
     const {
@@ -30,27 +62,54 @@ class IngredientCardComponent extends Component {
       unit,
     } = ingredient;
 
+    const {
+      anchorEl,
+    } = this.state;
+
     const description = `${qty} ${unit}`;
-    
+
+    const menuOpen = Boolean(anchorEl);
+
+    const titleProps = {
+      variant: 'subtitle1',
+    }
+
     return (
       <Card className={classes.card}>
+        <CardHeader
+          title={ title }
+          titleTypographyProps={titleProps}
+          action={
+            <IconButton onClick={this.onMenuOpened}>
+              <MoreVertIcon />
+            </IconButton>
+          }
+        />
+        <Menu
+          id="long-menu"
+          open={menuOpen}
+          anchorEl={anchorEl}
+          onClose={this.onMenuClosed}
+          PaperProps={{
+            style: {
+              maxHeight: MENU_ITEM_HEIGHT * 4.5,
+              width: 200,
+            },
+          }}
+        >
+          {
+            menuOptions.map(option => (
+              <MenuItem key={option} selected={option === 'Edit'} onClick={() => this.onMenuClosed(option, id)}>
+                {option}
+              </MenuItem>
+            ))
+          }
+        </Menu>
         <CardContent>
-          <Typography variant="title" component="p">
-            {title}        
-          </Typography>
-          <Typography component="h5">
-            {description}
+          <Typography component="p">
+            { description }
           </Typography>
         </CardContent>
-
-        <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Edit" onClick={() => onEditButtonClicked(id)}>
-            <EditIcon />
-          </IconButton>
-          <IconButton aria-label="Delete">
-            <DeleteIcon />
-          </IconButton>
-        </CardActions>
       </Card>
     );
   }
@@ -85,3 +144,28 @@ IngredientCardComponent.propTypes = {
 
 export default withStyles(styles)(IngredientCardComponent);
 
+        // <CardActions className={classes.actions} disableActionSpacing>
+        //   <IconButton aria-label="Edit" onClick={() => onEditButtonClicked(id)}>
+        //     <EditIcon />
+        //   </IconButton>
+        //   <IconButton aria-label="Delete">
+        //     <DeleteIcon />
+        //   </IconButton>
+        // </CardActions>
+        // 
+
+// import {
+//   red, blue,
+//   pink, cyan,
+//   teal, lime,
+//   green, brown,
+//   orange, purple,
+//   yellow, lightGreen,
+//   lightBlue, deepPurple, amber,
+// } from '@material-ui/core/colors';
+
+// const avatarColors = [
+//   red[500], blue[500], pink[500], cyan[500], lightBlue[900],
+//   teal[500], lime[900], green[500], orange[500], purple[500],
+//   brown[500], deepPurple[500], yellow[900], lightGreen[900], amber[500]
+// ];
