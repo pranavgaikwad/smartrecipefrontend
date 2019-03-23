@@ -8,45 +8,110 @@ A simple single page responsive application developed using React for Smart Reci
 * React Redux 
 * React Router v4
 * React Material
+* Json Server (For Dev Build Only)
 
 ## API Requirements
 
 The frontend application expects the backend to support CRUD operations on different data. 
 
-### User Sign Up API
+### User APIs
 
-New users create their accounts using this API. Requires backend server to accepet following arguments.
+Collection of users 
 
-* email : String
-* password : String
+```json
+{ 
+    "users": [
+        { 
+            "_type": "user", 
+            "id": "", 
+            "name": "", 
+            "email": "", 
+            "password": "", 
+            "salt": "", 
+            "createdAt": "", 
+            "updatedAt": "" 
+        }
+    ]
+}
+```
 
-Sign Up results in creating a new account and signing in the new user at the same time.
+Sign Up API
 
-On successful sign up, a new user with following attributes will be created in the database.
+```bash
+POST /signup
 
-* id : String (Unique user id)
-* email : String
-* password : String
-* salt : String (A unique salt for encryption)
+Parameters : 
+{
+    "user": {
+        "email": "",
+        "password": "",
+    }
+}
+```
 
-### User Sign In API
+Sign In API
 
-Existing users sign in to the application using this API. Requires backend server to accepet following arguments.
+```bash
+POST /signin
 
-* email : String
-* password  : String
+Parameters : 
+{
+    "user": {
+        "email": "",
+        "password": "",
+    }
+}
+```
 
-The server should return the status of the request along with a unique user id and a session id when Sign In succeeds.
+### Ingredient APIs
 
-### Ingredient API
+Collection of ingredients
 
-Most of the business logic of the application revolves around a list of ingredients of a user. Each ingredient comprises of following fields.
+```json
+{ 
+    "ingredients": [
+        { 
+            "_type": "ingredient", 
+            "id": "", 
+            "name": "", 
+            "qty": "", 
+            "unit": "", 
+            "createdAt": "", 
+            "updatedAt": "" 
+        }
+    ]
+}
+```
 
-* id : String
-* name : String
-* qty : String
-* unit : String
-* userId : String (Associates the ingredient with a user)
+Get list of ingredients
+
+```bash
+GET /ingredients
+
+Headers: 
+{
+    X-Access-Token: "<ACCESS_TOKEN>",
+}
+```
+
+Add new ingredient
+
+```bash
+POST /ingredients
+
+Parameters : 
+{
+    "id": "<OPTIONAL>",
+    "name": "",
+    "qty": "",
+    "unit": "",
+}
+
+Headers: 
+{
+    X-Access-Token: "<ACCESS_TOKEN>",
+}
+```
 
 ### Recipe API
 
@@ -73,7 +138,7 @@ Development version uses a mock backend API launched on port 3001. Make sure tha
 
 ```bash
 cd SmartRecipeRecommender/Frontend
-API_BASE_URL='http://localhost:3001/' yarn dev-start
+REACT_APP_API_BASE_URL='http://localhost:3001/' yarn start
 ```
 
 #### Production Build
@@ -82,5 +147,5 @@ To run application in production mode, replace mock API with your API.
 
 ```bash
 cd SmartRecipeRecommender/Frontend
-API_BASE_URL=<BACKEND_API_URL_HERE> yarn start
+REACT_APP_API_BASE_URL=<BACKEND_API_URL_HERE> yarn prod-start
 ```
