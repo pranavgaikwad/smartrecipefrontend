@@ -1,5 +1,5 @@
-# exclude directories
+# ignore directories
 node_modules/
 
-package-lock.json
-
+# ignore files
+.build
