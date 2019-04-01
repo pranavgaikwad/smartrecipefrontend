@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -25,8 +24,6 @@ import ShareIcon from '@material-ui/icons/Share';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-
-import IngredientChipsComponent from '../chips/ingredient-chips.component';
 
 const avatarColors = [
   red[500], blue[500], pink[500], cyan[500], lightBlue[900],
@@ -66,7 +63,7 @@ class RecipeCardComponent extends React.Component {
     const {
       id,
       name: title,
-      ingredients,
+      // ingredients,
       short_description : shortDescription,
     } = recipe;
 
@@ -76,7 +73,7 @@ class RecipeCardComponent extends React.Component {
       avatar = title[0];
     }
 
-    const showIngredientChips = (ingredients.length === 0) ? false : true;
+    // const showIngredientChips = (ingredients.length === 0) ? false : true;
     
     return (
       <Card className={classes.card}>
