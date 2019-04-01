@@ -44,6 +44,7 @@ class HomePageComponent extends Component {
     if (isSignUp) {
       this.props.signUp(email, password);
     } else {
+      // console.log('Calling Sign In');
       this.props.signIn(email, password);
     }
   }
@@ -111,6 +112,8 @@ class HomePageComponent extends Component {
     
     const { user, isSignUp } = this.state;
 
+    console.log('Sign up failed?', isSignInFailed);
+
     return (
       <main className={classes.main}>
         {
@@ -127,7 +130,6 @@ class HomePageComponent extends Component {
             signInButtonText="Sign In"
           />
         }
-
         {
           isSignUp &&
           <UserSignOnComponent
