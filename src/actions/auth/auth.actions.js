@@ -1,7 +1,10 @@
+import { createNotification } from 'react-redux-notify';
+
 import { apiProxy } from '../../utils/api-proxy.service';
 import { apiConstants } from '../../utils/app.constants';
 import { actionsSignIn } from '../../utils/app.constants';
 import { history, menuItemProps } from '../../utils/app.constants';
+import { errorNotification } from '../../utils/notify.config'; 
 
 /**
  * Sets request as pending
@@ -14,7 +17,7 @@ function setSignInPending() {
  * Sets request as succeded
  */
 function setSignInSuccess(user) {
-  return { type: actionsSignIn.success, user };
+  return { type: actionsSignIn.success, user: user };
 }
 
 /**
@@ -37,7 +40,7 @@ export function signUp(email, password) {
     };
 
     dispatch(setSignInPending());
-    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.users}`, user, '123')
+    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signin}`, user, '123')
       .then((response) => {
         dispatch(setSignInSuccess(response));
       })
@@ -62,8 +65,16 @@ export function signIn(email, password) {
     }; 
 
     dispatch(setSignInPending());
-    dispatch(setSignInSuccess(user));
-    history.push(menuItemProps.recipesMenu.route);
+    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signin}`, user, '123')
+      .then((response) => {
+        dispatch(setSignInSuccess(response));
+        history.push(menuItemProps.recipesMenu.route);
+      })
+      .catch((e) => { // eslint-disable-line
+        dispatch(setSignInFailed());
+        dispatch(createNotification(errorNotification("Invalid username or password")));
+      }
+    );
   };
 }
 
