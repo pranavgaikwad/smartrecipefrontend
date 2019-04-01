@@ -54,9 +54,7 @@ class UserSignOnComponent extends Component {
       onFormChange,
       onToggleClicked, // helps toggle between sign in and sign up forms
       signInButtonText, 
-      isSignInFailed,
       isSignInPending,  
-      isSignInSuccess,
     } = this.props;
 
     const { email, password } = user; 
