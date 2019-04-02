@@ -38,44 +38,37 @@ Collection of users
 Sign Up API
 
 ```bash
-POST /signup
+POST /signon?action=sign_up
 
 Parameters : 
 {
-    "user": {
-        "email": "",
-        "password": "",
-    }
+    "name": "",
+    "email": "",
+    "password": "",
 }
 
 Response :
 {
-    "user": {
-        "token": "",
-        "email": "",
-    }
+    "token": "",
+    "email": "",
 }
 ```
 
 Sign In API
 
 ```bash
-POST /signin
+POST /signon?action=login
 
 Parameters : 
 {
-    "user": {
-        "email": "",
-        "password": "",
-    }
+    "email": "",
+    "password": "",
 }
 
 Response :
 {
-    "user": {
-        "token": "",
-        "email": "",
-    }
+    "token": "",
+    "email": "",
 }
 ```
 
