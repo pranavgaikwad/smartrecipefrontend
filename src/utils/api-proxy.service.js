@@ -20,6 +20,26 @@ function getHeaders(accessToken) {
 }
 
 /**
+ * This function verifies status of API response
+ * @param {object} response - response object returned from API services
+ */
+function checkStatus(response) {
+  let msg = 'Error occurred';
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  }
+
+  if (response.message) {
+    msg = response.message;
+  }
+
+  const error = {};
+  error.message = msg;
+  error.status = response.status;
+  throw error;
+}
+
+/**
  * Common http requests 
  * @type {Object} Promise
  */
@@ -35,6 +55,7 @@ export const apiProxy = {
         method: 'get',
         headers: headers,
       })
+        .then(checkStatus)
         .then((response) => {
           resolve(response.json());
         })
@@ -56,6 +77,7 @@ export const apiProxy = {
         headers: headers,
         body: JSON.stringify(params),
       })
+        .then(checkStatus)
         .then((response) => {
           resolve(response.json());
         })
@@ -77,6 +99,7 @@ export const apiProxy = {
         headers: headers,
         body: JSON.stringify(params),
       })
+        .then(checkStatus)
         .then((response) => {
           resolve(response.json());
         })
@@ -97,6 +120,7 @@ export const apiProxy = {
         method: 'delete',
         headers: headers,
       })
+        .then(checkStatus)
         .then((response) => {
           resolve(response.json());
         })

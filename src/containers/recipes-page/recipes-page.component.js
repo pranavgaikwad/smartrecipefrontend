@@ -205,11 +205,13 @@ class RecipesPageContainer extends Component {
           showViewDialog: true,
           recipe: recipe[0],
         });
+        break;
       case 'SHARE':
         this.setState({
           showShareDialog: true,
           recipe: recipe[0],
         });
+        break;
       default:
         break;
     }
@@ -273,7 +275,6 @@ class RecipesPageContainer extends Component {
     const { 
       classes, 
       recipes,
-      recipesRequestFailed,
       recipesRequestPending,
     } = this.props;
 
@@ -281,7 +282,7 @@ class RecipesPageContainer extends Component {
 
     if (recipes !== undefined && recipes !== null) recipesGrid = this.getRecipesGrid(recipes);
 
-    const contentClass = recipesRequestPending ? classes.contentHidden : classes.content;
+    // const contentClass = recipesRequestPending ? classes.contentHidden : classes.content;
 
     return (
         <div className={classes.content}>

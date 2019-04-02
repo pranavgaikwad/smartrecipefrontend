@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import notifyReducer from 'react-redux-notify';
 
 import authReducer from '../reducers/auth/auth.reducer';
 import navigationReducer from '../reducers/navigation/navigation.reducer';
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   recipesReducer,
   navigationReducer,
   ingredientsReducer,
+  notifications: notifyReducer,
 });
 
 export default rootReducer;

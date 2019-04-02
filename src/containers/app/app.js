@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { Notify } from 'react-redux-notify';
 import { Route, Router } from 'react-router-dom';
+import 'react-redux-notify/dist/ReactReduxNotify.css';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -14,6 +16,16 @@ import HomePageComponent from '../home-page/home-page.component';
 import { history, menuItemProps } from '../../utils/app.constants';
 import RecipesPageContainer from '../recipes-page/recipes-page.component';
 import IngredientsPageContainer from '../ingredients-page/ingredients-page.component';
+
+const notificationStyles = {                  
+    margin:'5px 0', 
+    padding: '2px 5px', 
+    border: '1px solid #333', 
+    float:'right', 
+    clear: 'right',
+    width: '330px',
+    boxSizing: 'border-box',
+}
 
 /**
  * Main entry point for the frontend application
@@ -88,6 +100,7 @@ class App extends React.Component {
 
     return (
       <div className={classes.root}>
+        <Notify customStyles={notificationStyles} position="TopRight"/>
         {/* login page */}
         { !isSignInSuccess && <HomePageComponent/> }
 
@@ -108,7 +121,7 @@ class App extends React.Component {
         {/* main content on the page */}
         {
           isSignInSuccess &&
-          <main  className={classNames(classes.content, {[classes.contentShift]: open,})}>
+          <main className={classNames(classes.content, {[classes.contentShift]: open,})}>
               <Router history={history}>
                   <div>
                       <Route path={menuItemProps.recipesMenu.route} component={props => <RecipesPageContainer/>}/> 

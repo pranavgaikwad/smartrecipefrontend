@@ -1,7 +1,10 @@
+import { createNotification } from 'react-redux-notify';
+
 import { apiProxy } from '../../utils/api-proxy.service';
 import { apiConstants } from '../../utils/app.constants';
 import { actionsSignIn } from '../../utils/app.constants';
 import { history, menuItemProps } from '../../utils/app.constants';
+import { errorNotification } from '../../utils/notify.config'; 
 
 /**
  * Sets request as pending
@@ -14,7 +17,7 @@ function setSignInPending() {
  * Sets request as succeded
  */
 function setSignInSuccess(user) {
-  return { type: actionsSignIn.success, user };
+  return { type: actionsSignIn.success, user: user };
 }
 
 /**
@@ -29,21 +32,17 @@ function setSignInFailed() {
  * @param  {String} email    
  * @param  {String} password 
  */
-export function signUp(email, password) {
+export function signUp(user) {
   return (dispatch) => {
-    const user = {
-      email,
-      password
-    };
-
     dispatch(setSignInPending());
-    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.users}`, user, '123')
+    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signup}`, user, '123')
       .then((response) => {
         dispatch(setSignInSuccess(response));
+        history.push(menuItemProps.recipesMenu.route);
       })
       .catch((e) => { // eslint-disable-line
         dispatch(setSignInFailed());
-        console.log('error getting the user', e);
+        dispatch(createNotification(errorNotification("Sign up failed")));
       }
     );
   }
@@ -54,16 +53,19 @@ export function signUp(email, password) {
  * @param  {object} Email
  * @param  {object} Password
  */
-export function signIn(email, password) {
+export function signIn(user) {
   return (dispatch) => {
-    const user = {
-      email,
-      password
-    }; 
-
     dispatch(setSignInPending());
-    dispatch(setSignInSuccess(user));
-    history.push(menuItemProps.recipesMenu.route);
+    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signin}`, user, '123')
+      .then((response) => {
+        dispatch(setSignInSuccess(response));
+        history.push(menuItemProps.recipesMenu.route);
+      })
+      .catch((e) => { // eslint-disable-line
+        dispatch(setSignInFailed());
+        dispatch(createNotification(errorNotification("Invalid username or password")));
+      }
+    );
   };
 }
 

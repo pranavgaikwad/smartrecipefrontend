@@ -167,7 +167,6 @@ class IngredientsPageContainer extends Component {
     const { 
       classes, 
       allIngredients,
-      ingredientRequestFailed,
       ingredientRequestPending,
     } = this.props;
 

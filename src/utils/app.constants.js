@@ -9,6 +9,8 @@ export const appConstants = {
 export const apiConstants = {
     baseUrl: process.env.REACT_APP_API_BASE_URL,
     users: 'users/',
+    signin: 'signon?action=login',
+    signup: 'signon?action=sign_up',
     recipes: 'recipes/',
     ingredients: 'ingredients/',
 };  

@@ -1,6 +1,6 @@
 import { apiProxy } from '../../utils/api-proxy.service';
 import { apiConstants } from '../../utils/app.constants';
-import { actionsIngredients, statusRequests } from '../../utils/app.constants';
+import { actionsIngredients } from '../../utils/app.constants';
 
 /**
  * Sets request as pending
