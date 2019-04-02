@@ -17,6 +17,7 @@ class HomePageComponent extends Component {
 
     this.state = {
       user: {
+        name: '',
         email: '',
         password: '',
       },
@@ -39,13 +40,10 @@ class HomePageComponent extends Component {
 
     const { user, isSignUp } = this.state;
 
-    const { email, password } = user;
-
     if (isSignUp) {
-      this.props.signUp(email, password);
+      this.props.signUp(user);
     } else {
-      // console.log('Calling Sign In');
-      this.props.signIn(email, password);
+      this.props.signIn(user);
     }
   }
 
@@ -75,6 +73,16 @@ class HomePageComponent extends Component {
           user: {
             ...this.state.user,
             password: target.value,
+          }
+        });
+        break;
+
+      case 'username':
+        this.setState({
+          ...this.state,
+          user: {
+            ...this.state.user,
+            name: target.value,
           }
         });
         break;
@@ -111,8 +119,6 @@ class HomePageComponent extends Component {
     } = this.props;
     
     const { user, isSignUp } = this.state;
-
-    console.log('Sign up failed?', isSignInFailed);
 
     return (
       <main className={classes.main}>
@@ -175,8 +181,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  signIn: (email, password) => dispatch(signIn(email, password)),
-  signUp: (email, password) => dispatch(signUp(email, password)),
+  signIn: (user) => dispatch(signIn(user)),
+  signUp: (user) => dispatch(signUp(user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(HomePageComponent));
