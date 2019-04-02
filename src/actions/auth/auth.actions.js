@@ -32,21 +32,17 @@ function setSignInFailed() {
  * @param  {String} email    
  * @param  {String} password 
  */
-export function signUp(email, password) {
+export function signUp(user) {
   return (dispatch) => {
-    const user = {
-      email,
-      password
-    };
-
     dispatch(setSignInPending());
-    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signin}`, user, '123')
+    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signup}`, user, '123')
       .then((response) => {
         dispatch(setSignInSuccess(response));
+        history.push(menuItemProps.recipesMenu.route);
       })
       .catch((e) => { // eslint-disable-line
         dispatch(setSignInFailed());
-        console.log('error getting the user', e);
+        dispatch(createNotification(errorNotification("Sign up failed")));
       }
     );
   }
@@ -57,13 +53,8 @@ export function signUp(email, password) {
  * @param  {object} Email
  * @param  {object} Password
  */
-export function signIn(email, password) {
+export function signIn(user) {
   return (dispatch) => {
-    const user = {
-      email,
-      password
-    }; 
-
     dispatch(setSignInPending());
     apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signin}`, user, '123')
       .then((response) => {
