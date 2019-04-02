@@ -57,7 +57,7 @@ class UserSignOnComponent extends Component {
       isSignInPending,  
     } = this.props;
 
-    const { email, password } = user; 
+    const { name, email, password } = user; 
 
     const { password2 } = this.state;
 
@@ -68,9 +68,16 @@ class UserSignOnComponent extends Component {
             {appConstants.appTitle}
           </Typography>
           <form name="signOn" className={classes.form} onSubmit={(e) => this.onFormSubmit(e, onSubmit)}>
+            {
+              isSignUp &&
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="username">Name</InputLabel>
+                <Input name="username" type="text" value={name} id="username" autoFocus onChange={onFormChange}/>
+              </FormControl>
+            }
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input id="email" name="email" value={email} autoComplete="email" autoFocus onChange={onFormChange}/>
+              <Input id="email" name="email" value={email} autoComplete="email" onChange={onFormChange}/>
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
