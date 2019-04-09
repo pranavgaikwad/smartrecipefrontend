@@ -39,6 +39,8 @@ class EditRecipeFormComponent extends Component {
     if (!allIngredients || allIngredients === undefined) {
       allIngredients = [];
     }
+
+    const showIngredientsDropdown = true ? allIngredients.length > 0 : false;
     
     return (
       <div>
@@ -61,27 +63,35 @@ class EditRecipeFormComponent extends Component {
           <FormControl margin="normal" required fullWidth>
             <IngredientChipsComponent ingredients={ingredients} handleDelete={onIngredientDeleted}/>
           </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="ingredient">Add Ingredient</InputLabel>
-            <Select
-              native
-              id='ingredient-dropdown'
-              onClick={(e) => onIngredientAdded(e)}
-              inputProps={{
-                name: 'Ingredient',
-                id: 'ingredient',
-              }}
-            >
-              <option value="" />
-                {
-                  allIngredients.map(data => {
-                    return (
-                      <option key={data.id} value={data.id}>{data.name}</option>
-                    );
-                  })
-                }
-            </Select>
-          </FormControl>
+          {
+            showIngredientsDropdown &&
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="ingredient">Add Ingredient</InputLabel>
+              <Select
+                native
+                id='ingredient-dropdown'
+                onClick={(e) => onIngredientAdded(e)}
+                inputProps={{
+                  name: 'Ingredient',
+                  id: 'ingredient',
+                }}
+              >
+                  {
+                    allIngredients.map(data => {
+                      return (
+                        <option key={data.id} value={data.id}>{data.name}</option>
+                      );
+                    })
+                  }
+              </Select>
+            </FormControl>
+          }
+          {
+            !showIngredientsDropdown &&
+            <Typography component="p" variant="p">
+              Please add some ingredients...
+            </Typography>
+          }
         </form>
       </div>
     );
