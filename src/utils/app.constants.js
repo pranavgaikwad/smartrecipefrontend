@@ -11,7 +11,8 @@ export const apiConstants = {
     users: 'users/',
     signin: 'signon?action=login',
     signup: 'signon?action=sign_up',
-    recipes: 'recipes/',
+    getRecipes: 'cookbook?action=get_recipes',
+    addRecipe: 'cookbook?action=',
     ingredients: 'ingredients/',
 };  
 

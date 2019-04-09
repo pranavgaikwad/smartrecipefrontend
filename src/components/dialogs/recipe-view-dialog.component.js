@@ -24,7 +24,7 @@ class RecipeViewCard extends Component {
     
     const {
       name: title, 
-      description,
+      instructions: description,
       ingredients,
     } = recipe;
 

@@ -68,7 +68,7 @@ export function getRecipes() {
   return (dispatch) => {
     dispatch(setRequestPending());
 
-    apiProxy.get(`${apiConstants.baseUrl}${apiConstants.recipes}`, '123')
+    apiProxy.get(`${apiConstants.baseUrl}${apiConstants.getRecipes}`, '123')
     .then((response) => {
       dispatch(get(response));
     })
