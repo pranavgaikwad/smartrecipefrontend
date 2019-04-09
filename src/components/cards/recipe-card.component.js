@@ -55,16 +55,15 @@ class RecipeCardComponent extends React.Component {
     const { 
       recipe,
       classes, 
-      onCardViewed,
-      onEditButtonClicked,
+      onCardActionClicked,
       onDeleteButtonClicked,
     } = this.props;
 
     const {
-      id,
+      _id: id,
       name: title,
-      // ingredients,
-      short_description : shortDescription,
+      ingredients,
+      desc : shortDescription,
     } = recipe;
 
     let avatar = 'R';
@@ -93,24 +92,23 @@ class RecipeCardComponent extends React.Component {
           <Typography component="p">
             { shortDescription } 
           </Typography>
-          
         </CardContent>
 
         {/* Card Footer */}
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="View" onClick={() => onCardViewed(id, 'VIEW')}>
+          <IconButton aria-label="View" onClick={() => onCardActionClicked(id, 'VIEW')}>
             <VisibilityIcon />
           </IconButton>
           <IconButton aria-label="Add to favorites">
             <FavoriteIcon />
           </IconButton>
-          <IconButton aria-label="Edit" onClick={() => onEditButtonClicked(id)}>
+          <IconButton aria-label="Edit" onClick={() => onCardActionClicked(id, 'EDIT')}>
             <EditIcon />
           </IconButton>
           <IconButton aria-label="Delete" onClick={() => onDeleteButtonClicked(id)}>
             <DeleteIcon />
           </IconButton>
-          <IconButton aria-label="Share" onClick={() => onCardViewed(id, 'SHARE')}>
+          <IconButton aria-label="Share" onClick={() => onCardActionClicked(id, 'SHARE')}>
             <ShareIcon />
           </IconButton>
         </CardActions>
