@@ -53,6 +53,7 @@ class RecipeCardComponent extends React.Component {
 
   render() {
     const { 
+      id,
       recipe,
       classes, 
       onCardActionClicked,
@@ -60,7 +61,6 @@ class RecipeCardComponent extends React.Component {
     } = this.props;
 
     const {
-      _id: id,
       name: title,
       ingredients,
       desc : shortDescription,
