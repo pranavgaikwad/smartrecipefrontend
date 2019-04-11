@@ -77,9 +77,9 @@ class EditRecipeFormComponent extends Component {
                 }}
               >
                   {
-                    allIngredients.map(data => {
+                    allIngredients.map((data, id) => {
                       return (
-                        <option key={data.id} value={data.id}>{data.name}</option>
+                        <option key={id} value={id}>{data.name}</option>
                       );
                     })
                   }
