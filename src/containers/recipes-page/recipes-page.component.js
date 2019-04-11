@@ -129,32 +129,24 @@ class RecipesPageContainer extends Component {
     const id = e.target.value;
 
     for (var i = 0; i < currentIngredients.length; i++) {
-      if (currentIngredients[i].id == id) {   // eslint-disable-line
+      if (currentIngredients[i].name == allIngredients[id].name) {   // eslint-disable-line
         return
       }
     }
 
-    this.setState(state => {
-      const ingredients = [...state.recipe.ingredients];
-
-      let chipToAdd = {
-        id: id,
-      };
-
-      for (var i = 0; i < allIngredients.length; i++) {
-        if (allIngredients[i].id == id) {   // eslint-disable-line
-          chipToAdd = allIngredients[i];
-        }
-      }
-
-      ingredients.push(chipToAdd);
-      return {
-        recipe: {
-          ...state.recipe,
-          ingredients,
-        } 
-      };
-    });
+    if (allIngredients[id]) {
+      this.setState(state => {
+        const ingredients = [...state.recipe.ingredients];
+        const chipToAdd = allIngredients[id];
+        ingredients.push(chipToAdd);
+        return {
+          recipe: {
+            ...state.recipe,
+            ingredients,
+          } 
+        };
+      });
+    }
   }
 
   /**
@@ -181,7 +173,7 @@ class RecipesPageContainer extends Component {
   }
 
   onCardActionClicked(id, action) {
-    const recipe = this.props.recipes.filter((recipe) => recipe.id === id);
+    const recipe = this.props.recipes[id];
 
     switch(action) {
       case 'EDIT':
@@ -189,7 +181,7 @@ class RecipesPageContainer extends Component {
           showEditDialog: true,
           showViewDialog: false,
           showShareDialog: false,
-          recipe: recipe[0],
+          recipe,
         });
         break;
       case 'VIEW':
@@ -197,7 +189,7 @@ class RecipesPageContainer extends Component {
           showViewDialog: true,
           showEditDialog: false,
           showShareDialog: false,
-          recipe: recipe[0],
+          recipe,
         });
         break;
       case 'SHARE':
@@ -205,7 +197,7 @@ class RecipesPageContainer extends Component {
           showShareDialog: true,
           showViewDialog: false,
           showEditDialog: false,
-          recipe: recipe[0],
+          recipe,
         });
         break;
       default:
@@ -236,7 +228,8 @@ class RecipesPageContainer extends Component {
             key={"recipe_item_" + i} 
             xs={12} sm={6} md={4} lg={3} xl={3}>
             <RecipeCardComponent
-              key={currentRecipe.id}
+              key={i}
+              id={i}
               recipe={currentRecipe}
               onCardActionClicked={this.onCardActionClicked}
               onDeleteButtonClicked={this.onRecipeDeleteButtonClicked}
