@@ -12,7 +12,9 @@ export const apiConstants = {
     signin: 'signon?action=login',
     signup: 'signon?action=sign_up',
     getRecipes: 'cookbook?action=get_recipes',
-    addRecipe: 'cookbook?action=',
+    addRecipe: 'cookbook?action=add_recipe',
+    editRecipe: 'cookbook?action=edit_recipe',
+    searchRecipes: 'cookbook?action=search_recipes',
     ingredients: 'ingredients/',
 };  
 
