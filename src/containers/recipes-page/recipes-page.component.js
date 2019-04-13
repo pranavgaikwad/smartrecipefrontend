@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import AddIcon from '@material-ui/icons/Add';
 
 import { getIngredients } from '../../actions/ingredients-page/ingredients-page.actions';
-import { addRecipe, getRecipes, deleteRecipe } from '../../actions/recipes-page/recipes-page.actions';
+import { addRecipe, getRecipes, deleteRecipe, editRecipe } from '../../actions/recipes-page/recipes-page.actions';
 
 import RecipeCardComponent from '../../components/cards/recipe-card.component';
 import AddRecipeDialog from '../../components/dialogs/add-recipe-dialog.component';
@@ -29,6 +29,7 @@ class RecipesPageContainer extends Component {
       showShareDialog: false,
       showViewDialog: false,
       showEditDialog: false,
+      editMode: false,
       recipe: newRecipe,
     };
 
@@ -48,7 +49,7 @@ class RecipesPageContainer extends Component {
    */
   onAddButtonClicked() {
     this.setState({
-      showViewDialog: true,
+      showEditDialog: true,
     });
   } 
 
@@ -68,9 +69,15 @@ class RecipesPageContainer extends Component {
    * @return
    */
   onDialogSubmit(e, recipe) {
+    const { editMode } = this.state;
+
     this.onCardViewClosed();
 
-    this.props.addRecipe(recipe);
+    if (editMode) {
+      this.props.editRecipe(recipe);
+    } else { 
+      this.props.addRecipe(recipe);
+    }
   }
 
   /**
@@ -96,7 +103,7 @@ class RecipesPageContainer extends Component {
         this.setState({
           recipe: {
             ...this.state.recipe,
-            short_description: target.value,
+            desc: target.value,
           }
         });
         break;
@@ -104,7 +111,7 @@ class RecipesPageContainer extends Component {
         this.setState({
           recipe: {
             ...this.state.recipe,
-            description: target.value,
+            instructions: target.value,
           }
         });
         break;
@@ -181,6 +188,7 @@ class RecipesPageContainer extends Component {
           showEditDialog: true,
           showViewDialog: false,
           showShareDialog: false,
+          editMode: true,
           recipe,
         });
         break;
@@ -189,6 +197,7 @@ class RecipesPageContainer extends Component {
           showViewDialog: true,
           showEditDialog: false,
           showShareDialog: false,
+          editMode: false,
           recipe,
         });
         break;
@@ -197,6 +206,7 @@ class RecipesPageContainer extends Component {
           showShareDialog: true,
           showViewDialog: false,
           showEditDialog: false,
+          editMode: false,
           recipe,
         });
         break;
@@ -250,7 +260,7 @@ class RecipesPageContainer extends Component {
   }
 
   render() {
-    const { showShareDialog, showViewDialog, recipe, showEditDialog } = this.state;
+    const { showShareDialog, showViewDialog, recipe, showEditDialog, editMode } = this.state;
 
     const { 
       classes, 
@@ -352,6 +362,7 @@ const mapDispatchToProps = dispatch => ({
   getIngredients: () => dispatch(getIngredients()),
   deleteRecipe: (id) => dispatch(deleteRecipe(id)),
   addRecipe: (recipe) => dispatch(addRecipe(recipe)),
+  editRecipe: (recipe) => dispatch(editRecipe(recipe)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(RecipesPageContainer));
