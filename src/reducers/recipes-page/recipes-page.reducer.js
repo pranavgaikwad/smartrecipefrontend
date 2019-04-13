@@ -39,6 +39,18 @@ export default function recipesReducer(state = initialState, action = {}) {
         isPending: false,
       };
 
+    case actionsRecipes.update:
+      const { recipe } = action;
+      console.log("updated recipe ", recipe);
+      const updatedRecipes = state.recipes.map(el => (el.name === recipe.name ? {...el, recipe} : el));
+      console.log("updated recipes in state ", updatedRecipes);
+      return {
+        ...state,
+        recipes: updatedRecipes,
+        isFailed: false,
+        isPending: false,
+      };
+
     case actionsRecipes.pending:
       return {
         ...state,
