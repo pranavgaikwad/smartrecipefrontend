@@ -33,9 +33,13 @@ function setSignInFailed() {
  * @param  {String} password 
  */
 export function signUp(user) {
+  const requestBody = {
+    user,
+  }; 
+
   return (dispatch) => {
     dispatch(setSignInPending());
-    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signup}`, user, '123')
+    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signup}`, requestBody, '123')
       .then((response) => {
         dispatch(setSignInSuccess(response));
         history.push(menuItemProps.recipesMenu.route);
@@ -54,10 +58,15 @@ export function signUp(user) {
  * @param  {object} Password
  */
 export function signIn(user) {
+  const requestBody = {
+    user,
+  }; 
+
   return (dispatch) => {
     dispatch(setSignInPending());
-    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signin}`, user, '123')
+    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signin}`, requestBody, '123')
       .then((response) => {
+        console.log("Response : ", response);
         dispatch(setSignInSuccess(response));
         history.push(menuItemProps.recipesMenu.route);
       })
