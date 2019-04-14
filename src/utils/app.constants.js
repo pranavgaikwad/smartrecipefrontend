@@ -8,14 +8,13 @@ export const appConstants = {
 
 export const apiConstants = {
     baseUrl: process.env.REACT_APP_API_BASE_URL,
-    users: 'users/',
     signin: 'signon?action=login',
     signup: 'signon?action=sign_up',
     getRecipes: 'cookbook?action=get_recipes',
     addRecipe: 'cookbook?action=add_recipe',
     editRecipe: 'cookbook?action=edit_recipe',
     searchRecipes: 'cookbook?action=search_recipes',
-    ingredients: 'ingredients/',
+    updateUser: 'user?action=update',
 };  
 
 // constants related to in-memory ORM models 
@@ -45,6 +44,14 @@ export const actionsSignIn = {
     pending: "ACTION_SIGN_IN_PENDING",
     success: "ACTION_SIGN_IN_SUCCESS",
     signout: "ACTION_SIGN_OUT",
+};
+
+// constants related to user sign in actions
+export const actionsUser = {
+    failed: "ACTION_USER_FAILED",
+    pending: "ACTION_USER_PENDING",
+    success: "ACTION_USER_SUCCESS",
+    update: "ACTION_USER_UPDATE",
 };
 
 // constants related to ingredient actions
