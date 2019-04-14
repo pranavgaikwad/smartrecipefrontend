@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import IngredientChipsComponent from '../chips/ingredient-chips.component.js'
+import IngredientListComponent from '../lists/ingredients-list.component';
 
 
 /**
@@ -61,7 +61,7 @@ class EditRecipeFormComponent extends Component {
             <Input name="description" id="description" value={description} onChange={onFormChange} multiline rows='5' rowsMax='10' autoComplete="description" />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
-            <IngredientChipsComponent ingredients={ingredients} handleDelete={onIngredientDeleted}/>
+            <IngredientListComponent ingredients={ingredients} handleDelete={onIngredientDeleted}/>
           </FormControl>
           {
             showIngredientsDropdown &&
@@ -88,7 +88,7 @@ class EditRecipeFormComponent extends Component {
           }
           {
             !showIngredientsDropdown &&
-            <Typography component="p" variant="p">
+            <Typography component="p">
               Please add some ingredients...
             </Typography>
           }
