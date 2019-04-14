@@ -21,11 +21,11 @@ class EditIngredientFormComponent extends Component {
       onUnitChange,
     } = this.props;
 
-    let title = '', qty = '', unit = ''; 
+    let title = '', quantity = '', unit = ''; 
     
     if (ingredient !== null && ingredient !== undefined && ingredient) {
       title = ingredient.name;
-      qty = ingredient.qty; 
+      quantity = ingredient.quantity; 
       unit = ingredient.unit;
     }
     
@@ -37,8 +37,8 @@ class EditIngredientFormComponent extends Component {
             <Input id="title" value={title} onChange={onFormChange} name="title" autoComplete="title" autoFocus />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="qty">Quantity</InputLabel>
-            <Input name="qty" id="qty" value={qty} onChange={onFormChange} autoComplete="qty" />
+            <InputLabel htmlFor="quantity">Quantity</InputLabel>
+            <Input name="quantity" id="quantity" value={quantity} onChange={onFormChange} autoComplete="quantity" />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="unit">Unit</InputLabel>
