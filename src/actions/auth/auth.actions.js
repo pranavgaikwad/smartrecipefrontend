@@ -2,7 +2,7 @@ import { createNotification } from 'react-redux-notify';
 
 import { apiProxy } from '../../utils/api-proxy.service';
 import { apiConstants } from '../../utils/app.constants';
-import { actionsSignIn } from '../../utils/app.constants';
+import { actionsSignIn, actionsUser } from '../../utils/app.constants';
 import { history, menuItemProps } from '../../utils/app.constants';
 import { errorNotification } from '../../utils/notify.config'; 
 
@@ -17,7 +17,7 @@ function setSignInPending() {
  * Sets request as succeded
  */
 function setSignInSuccess(user) {
-  return { type: actionsSignIn.success, user: user };
+  return { type: actionsSignIn.success, user };
 }
 
 /**
@@ -41,7 +41,7 @@ export function signUp(user) {
     dispatch(setSignInPending());
     apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signup}`, requestBody, '123')
       .then((response) => {
-        dispatch(setSignInSuccess(response));
+        dispatch(setSignInSuccess(response.user));
         history.push(menuItemProps.recipesMenu.route);
       })
       .catch((e) => { // eslint-disable-line
@@ -66,8 +66,7 @@ export function signIn(user) {
     dispatch(setSignInPending());
     apiProxy.post(`${apiConstants.baseUrl}${apiConstants.signin}`, requestBody, '123')
       .then((response) => {
-        console.log("Response : ", response);
-        dispatch(setSignInSuccess(response));
+        dispatch(setSignInSuccess(response.user));
         history.push(menuItemProps.recipesMenu.route);
       })
       .catch((e) => { // eslint-disable-line
@@ -77,7 +76,6 @@ export function signIn(user) {
     );
   };
 }
-
 
 /**
  * Signs out user
@@ -93,5 +91,40 @@ export function signOut(email, password) {
 
   return (dispatch) => {
     dispatch(setSignOut());
+  };
+}
+
+function setRequestPending() {
+  return { type: actionsUser.pending };
+}
+
+function setRequestFailed() {
+  return { type: actionsUser.failed };
+}
+
+function update(user) {
+  return { type: actionsUser.update, user };
+}
+
+/**
+ * Add new ingredient to Redux store
+ * @param  {Object} ingredient  Ingredient to add
+ * @return 
+ */
+export function updateUser(user) {
+  const requestBody = {
+    user: user,
+  }; 
+
+  return (dispatch) => {
+    dispatch(setRequestPending());
+    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.updateUser}`, requestBody, '123')
+    .then((response) => {
+      dispatch(update(response.user));
+    })
+    .catch((e) => { // eslint-disable-line
+      dispatch(setRequestFailed());
+      console.log('Error updating ingredient', e);
+    })
   };
 }
