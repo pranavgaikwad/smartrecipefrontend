@@ -8,7 +8,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import AddIcon from '@material-ui/icons/Add';
 
-import { getIngredients } from '../../actions/ingredients-page/ingredients-page.actions';
 import { addRecipe, getRecipes, deleteRecipe, editRecipe } from '../../actions/recipes-page/recipes-page.actions';
 
 import RecipeCardComponent from '../../components/cards/recipe-card.component';
@@ -160,11 +159,10 @@ class RecipesPageContainer extends Component {
    * Handles event when ingredient is deleted from a recipe
    * @param  {Object} data Ingredient data
    */
-  onFormIngredientDeleted(data) {
+  onFormIngredientDeleted(id) {
     this.setState(state => {
       const ingredients = [...state.recipe.ingredients];
-      const chipToDelete = ingredients.indexOf(data);
-      ingredients.splice(chipToDelete, 1);
+      ingredients.splice(id, 1);
       return { 
         ...state,
         recipe: {
@@ -260,7 +258,7 @@ class RecipesPageContainer extends Component {
   }
 
   render() {
-    const { showShareDialog, showViewDialog, recipe, showEditDialog, editMode } = this.state;
+    const { showShareDialog, showViewDialog, recipe, showEditDialog } = this.state;
 
     const { 
       classes, 
@@ -359,7 +357,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getRecipes: () => dispatch(getRecipes()),
-  getIngredients: () => dispatch(getIngredients()),
   deleteRecipe: (id) => dispatch(deleteRecipe(id)),
   addRecipe: (recipe) => dispatch(addRecipe(recipe)),
   editRecipe: (recipe) => dispatch(editRecipe(recipe)),
