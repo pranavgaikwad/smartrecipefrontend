@@ -83,7 +83,7 @@ export function getRecipes() {
 
     apiProxy.get(`${apiConstants.baseUrl}${apiConstants.getRecipes}`, '123')
     .then((response) => {
-      const { recipes, message } = response;
+      const { recipes } = response;
       dispatch(get(recipes));
     })
     .catch((e) => { // eslint-disable-line
