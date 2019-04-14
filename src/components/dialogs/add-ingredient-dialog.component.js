@@ -17,7 +17,7 @@ class AddIngredientDialog extends Component {
     this.state = {
       recipe: {
         name: '',
-        qty: 1,
+        quantity: 1,
         unit: 'lb',
       },
     }
