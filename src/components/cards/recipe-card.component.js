@@ -62,7 +62,6 @@ class RecipeCardComponent extends React.Component {
 
     const {
       name: title,
-      ingredients,
       desc : shortDescription,
     } = recipe;
 
