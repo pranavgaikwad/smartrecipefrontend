@@ -8,14 +8,23 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import AddIcon from '@material-ui/icons/Add';
 
-import { addRecipe, getRecipes, deleteRecipe, editRecipe } from '../../actions/recipes-page/recipes-page.actions';
+import { 
+  addRecipe, 
+  getRecipes, 
+  editRecipe,
+  deleteRecipe, 
+  getRecommendedRecipes,
+} from '../../actions/recipes-page/recipes-page.actions';
 
 import RecipeCardComponent from '../../components/cards/recipe-card.component';
 import AddRecipeDialog from '../../components/dialogs/add-recipe-dialog.component';
 import RecipeViewComponent from '../../components/dialogs/recipe-view-dialog.component';
 import RecipeShareComponent from '../../components/dialogs/social-share-dialog.component';
+import AddIngredientDialog from '../../components/dialogs/add-ingredient-dialog.component';
 
 const newRecipe = { name: '', desc: '', instructions: '', ingredients: [], nutVal: {} };
+
+const newIngredient = { name: "", quantity: "", unit: "" };
 
 /**
  * Main Container for recipes page. 
@@ -25,21 +34,25 @@ class RecipesPageContainer extends Component {
     super(props);
 
     this.state = {
+      editMode: false,
+      recipe: newRecipe,
       showShareDialog: false,
       showViewDialog: false,
       showEditDialog: false,
-      editMode: false,
-      recipe: newRecipe,
+      ingredientToAdd: newIngredient,
+      showAddIngredientDialog: false,
     };
 
-    this.onCardActionClicked = this.onCardActionClicked.bind(this);
     this.onDialogSubmit = this.onDialogSubmit.bind(this);
     this.onCardViewClosed = this.onCardViewClosed.bind(this);
     this.onDialogFormChange = this.onDialogFormChange.bind(this);
     this.onAddButtonClicked = this.onAddButtonClicked.bind(this);
+    this.onCardActionClicked = this.onCardActionClicked.bind(this);
     this.onFormIngredientAdded = this.onFormIngredientAdded.bind(this);
     this.onFormIngredientDeleted = this.onFormIngredientDeleted.bind(this);
     this.onRecipeDeleteButtonClicked = this.onRecipeDeleteButtonClicked.bind(this);
+    this.onAddIngredientDialogClosed = this.onAddIngredientDialogClosed.bind(this);
+    this.onAddIngredientDialogSubmit = this.onAddIngredientDialogSubmit.bind(this);
   }
 
   /**
@@ -54,11 +67,38 @@ class RecipesPageContainer extends Component {
 
   onCardViewClosed() {
     this.setState({
-      recipe: newRecipe, 
+      recipe: newRecipe,
       showViewDialog: false,
       showShareDialog: false,
       showEditDialog: false,
     });
+  }
+
+  onAddIngredientDialogClosed() {
+    this.setState({
+      ingredientToAdd: newIngredient,
+      showAddIngredientDialog: false,
+    });
+  }
+
+  onAddIngredientDialogSubmit() {
+      const { ingredientToAdd } = this.state;
+
+      this.onAddIngredientDialogClosed();
+
+      if (ingredientToAdd) {
+        this.setState(state => {
+          const ingredients = [...state.recipe.ingredients];
+          const chipToAdd = ingredientToAdd;
+          ingredients.push(chipToAdd);
+          return {
+            recipe: {
+              ...state.recipe,
+              ingredients,
+            } 
+          };
+        });
+      }
   }
 
   /**
@@ -114,6 +154,14 @@ class RecipesPageContainer extends Component {
           }
         });
         break;
+      case 'quantity':
+        this.setState({
+          ingredientToAdd: {
+            ...this.state.ingredientToAdd,
+            quantity: target.value,
+          }
+        });
+        break;
       default:
         break;
     }
@@ -129,10 +177,19 @@ class RecipesPageContainer extends Component {
     } = this.state.recipe;
 
     const {
-      allIngredients
+      user
     } = this.props;
-
+    
     const id = e.target.value;
+
+    const { fridge } = user;
+
+    let allIngredients = [];
+
+    if (fridge) {
+      const { ingredients } = fridge; 
+      allIngredients = ingredients;
+    }
 
     for (var i = 0; i < currentIngredients.length; i++) {
       if (currentIngredients[i].name == allIngredients[id].name) {   // eslint-disable-line
@@ -141,17 +198,7 @@ class RecipesPageContainer extends Component {
     }
 
     if (allIngredients[id]) {
-      this.setState(state => {
-        const ingredients = [...state.recipe.ingredients];
-        const chipToAdd = allIngredients[id];
-        ingredients.push(chipToAdd);
-        return {
-          recipe: {
-            ...state.recipe,
-            ingredients,
-          } 
-        };
-      });
+      this.setState({ showAddIngredientDialog: true, ingredientToAdd: allIngredients[id] });
     }
   }
 
@@ -236,8 +283,8 @@ class RecipesPageContainer extends Component {
             key={"recipe_item_" + i} 
             xs={12} sm={6} md={4} lg={3} xl={3}>
             <RecipeCardComponent
-              key={i}
               id={i}
+              key={i}
               recipe={currentRecipe}
               onCardActionClicked={this.onCardActionClicked}
               onDeleteButtonClicked={this.onRecipeDeleteButtonClicked}
@@ -255,10 +302,19 @@ class RecipesPageContainer extends Component {
 
   componentDidMount() {
     this.props.getRecipes();
+
+    this.props.getRecommendedRecipes();
   }
 
   render() {
-    const { showShareDialog, showViewDialog, recipe, showEditDialog } = this.state;
+    const { 
+      recipe, 
+      showEditDialog, 
+      showViewDialog, 
+      showShareDialog,
+      ingredientToAdd,
+      showAddIngredientDialog,
+    } = this.state;
 
     const { 
       classes, 
@@ -290,6 +346,16 @@ class RecipesPageContainer extends Component {
               onFormChange={this.onDialogFormChange}
               onIngredientAdded={this.onFormIngredientAdded}
               onIngredientDeleted={this.onFormIngredientDeleted}/>
+          }
+          {
+            <AddIngredientDialog
+              viewOnly={true}
+              ingredient={ingredientToAdd}
+              open={showAddIngredientDialog} 
+              onFormChange={this.onDialogFormChange}
+              onClose={this.onAddIngredientDialogClosed}
+              onSubmit={this.onAddIngredientDialogSubmit} 
+              />
           }
           {
             <RecipeViewComponent
@@ -347,9 +413,9 @@ RecipesPageContainer.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  user: state.authReducer.user,
   recipes: state.recipesReducer.recipes,
   currentRoute: state.navigationReducer.currentRoute,
-  allIngredients: state.ingredientsReducer.ingredients,
   recipesRequestFailed: state.recipesReducer.isFailed,
   recipesRequestPending: state.recipesReducer.isPending,
 });
@@ -360,6 +426,7 @@ const mapDispatchToProps = dispatch => ({
   deleteRecipe: (id) => dispatch(deleteRecipe(id)),
   addRecipe: (recipe) => dispatch(addRecipe(recipe)),
   editRecipe: (recipe) => dispatch(editRecipe(recipe)),
+  getRecommendedRecipes: () => dispatch(getRecommendedRecipes()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(RecipesPageContainer));
