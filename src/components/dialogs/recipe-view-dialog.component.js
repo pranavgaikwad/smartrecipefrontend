@@ -25,6 +25,7 @@ class RecipeViewCard extends Component {
     const {
       name: title, 
       instructions: description,
+      disabled,
       ingredients,
     } = recipe;
 
@@ -35,6 +36,10 @@ class RecipeViewCard extends Component {
         <DialogTitle id="form-dialog-title">{title}</DialogTitle>
         <DialogContent>
           {
+            disabled &&
+            <Typography className={classes.warning} component="p">You cannot make this reipe with your ingredients!</Typography>
+          }
+          {
             showIngredientList &&
             <Typography className={classes.typography} component="h6" variant="h6">Ingredients</Typography>
           }
@@ -43,7 +48,7 @@ class RecipeViewCard extends Component {
             <IngredientListComponent ingredients={ingredients}/>
           }
           <Typography component="h6" variant="h6" className={classes.typography}>
-            Method
+            Instructions
           </Typography>
           <Typography component="p">
             {description} 
@@ -67,6 +72,11 @@ const styles = theme => ({
   typography: {
     marginTop : 5,
     marginBottom: 5,
+  },
+  warning: {
+    marginTop : 5,
+    marginBottom: 5,
+    color: "#f00",
   }
 });
 
