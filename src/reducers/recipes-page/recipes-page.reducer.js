@@ -16,6 +16,8 @@ export default function recipesReducer(state = initialState, action = {}) {
 
  let updatedRecipes = [];
 
+ let index = null;
+
  switch (action.type) {
     case actionsRecipes.add:
       let found = false;
@@ -42,10 +44,15 @@ export default function recipesReducer(state = initialState, action = {}) {
       };
 
     case actionsRecipes.recommend:
-      updatedRecipes = [...recipes];
-
-      if (recipe) updatedRecipes = [recipe, ...recipes];
-      
+      index = state.recipes.findIndex(x=> x.name === recipe.name);
+      if (index != -1) {
+        state.recipes.splice(index, 1);
+      }
+      recipe = {
+        ...recipe,
+        recommended: true,
+      }
+      if (recipe) updatedRecipes = [recipe, ...state.recipes];
       return {
         ...state,
         recipes: updatedRecipes,
@@ -54,13 +61,14 @@ export default function recipesReducer(state = initialState, action = {}) {
       };
 
     case actionsRecipes.update:
-      const index = state.recipes.findIndex(x=> x.name === recipe.name);
-      updatedRecipes = [
-        ...state.recipes.slice(0, index),
-        Object.assign({}, state.recipes[index], recipe),
-        ...state.recipes.slice(index+1),
-      ];
-
+      index = state.recipes.findIndex(x=> x.name === recipe.name);
+      if (index != -1) {
+        updatedRecipes = [
+          ...state.recipes.slice(0, index),
+          Object.assign({}, state.recipes[index], recipe),
+          ...state.recipes.slice(index+1),
+        ];   
+      }
       return {
         ...state,
         recipes: updatedRecipes,
