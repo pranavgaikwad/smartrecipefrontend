@@ -273,6 +273,10 @@ class RecipesPageContainer extends Component {
     for (var i = 0; i < totalRecipes; i++) {
       const currentRecipe = recipes[i];
 
+      let isRecommended = false;
+
+      if (currentRecipe.recommended) isRecommended = true;
+
       if ((currentRecipe !== undefined) && (currentRecipe !== null)) {
         recipeItemComponents.push(
           <Grid 
@@ -286,6 +290,7 @@ class RecipesPageContainer extends Component {
               id={i}
               key={i}
               recipe={currentRecipe}
+              recommended={isRecommended}
               onCardActionClicked={this.onCardActionClicked}
               onDeleteButtonClicked={this.onRecipeDeleteButtonClicked}
             />
@@ -301,9 +306,13 @@ class RecipesPageContainer extends Component {
   }
 
   componentDidMount() {
+    const { user } = this.props;
+
     this.props.getRecipes();
 
-    this.props.getRecommendedRecipes();
+    if (user) {
+      this.props.getRecommendedRecipes(user);
+    }
   }
 
   render() {
@@ -426,7 +435,7 @@ const mapDispatchToProps = dispatch => ({
   deleteRecipe: (id) => dispatch(deleteRecipe(id)),
   addRecipe: (recipe) => dispatch(addRecipe(recipe)),
   editRecipe: (recipe) => dispatch(editRecipe(recipe)),
-  getRecommendedRecipes: () => dispatch(getRecommendedRecipes()),
+  getRecommendedRecipes: (user) => dispatch(getRecommendedRecipes(user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(RecipesPageContainer));
