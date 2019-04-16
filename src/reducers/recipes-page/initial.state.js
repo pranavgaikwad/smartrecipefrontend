@@ -13,5 +13,5 @@ export default {
     recipes: [],
     isFailed: false,
     isPending: false,
-    recommendedRecipes: [],
+    recommendedRecipe: null,
 };
