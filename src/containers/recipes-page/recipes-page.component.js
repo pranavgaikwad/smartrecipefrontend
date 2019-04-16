@@ -238,7 +238,7 @@ class RecipesPageContainer extends Component {
       favorites.push(recipe);
     }
     else {
-      console.log(favorites);
+      console.log(favorites, recipe);
       const index = favorites.findIndex(x=> x.name === recipe.name);
       console.log(index);
       if (index != -1) {
@@ -258,8 +258,12 @@ class RecipesPageContainer extends Component {
     this.props.updateUser(user);
   }
 
-  onCardActionClicked(id, action, isDisabled, isFavorite) {
-    let recipe = this.props.recipes[id];
+  onCardActionClicked(recipeName, action, isDisabled, isFavorite) {
+    const index = this.props.recipes.findIndex(x => x.name === recipeName);
+
+    if (index == -1) return;
+
+    let recipe = this.props.recipes[index];
 
     recipe = {
       ...recipe, 
@@ -330,14 +334,20 @@ class RecipesPageContainer extends Component {
 
   registerRecommendedRecipe(recipes) {
     let { recommendedRecipe } = this.props;
+
+    let index = recipes.findIndex(x=> x.name === recommendedRecipe.name);
+
+    if (index != -1) recommendedRecipe = recipes[index];
+
     recommendedRecipe = {
       ...recommendedRecipe,
       recommended: true,
       disabled: false,
     };
+
     let updatedRecipes = Object.assign([], recipes); 
 
-    let index = updatedRecipes.findIndex(x=> x.name === recommendedRecipe.name);
+    index = updatedRecipes.findIndex(x=> x.name === recommendedRecipe.name);
     if (index != -1) {
       updatedRecipes.splice(index, 1);
       updatedRecipes = [

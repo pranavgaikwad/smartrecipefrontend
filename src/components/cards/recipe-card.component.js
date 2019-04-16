@@ -125,27 +125,27 @@ class RecipeCardComponent extends React.Component {
         {/* Card Footer */}
         <CardActions className={classes.actions} disableActionSpacing>
           <Tooltip title="View" aria-label="View">
-            <IconButton aria-label="View" onClick={() => onCardActionClicked(id, 'VIEW', disabled)}>
+            <IconButton aria-label="View" onClick={() => onCardActionClicked(title, 'VIEW', disabled)}>
               <VisibilityIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Favourite" aria-label="Favourite">
-            <IconButton style={{ color: favoriteIconColor }} aria-label="Add to favorites" onClick={() => onCardActionClicked(id, 'FAVORITE', disabled, isFavorite)}>
+            <IconButton style={{ color: favoriteIconColor }} aria-label="Add to favorites" onClick={() => onCardActionClicked(title, 'FAVORITE', disabled, isFavorite)}>
               <FavoriteIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Edit" aria-label="Edit">
-            <IconButton aria-label="Edit" onClick={() => onCardActionClicked(id, 'EDIT')}>
+            <IconButton aria-label="Edit" onClick={() => onCardActionClicked(title, 'EDIT')}>
               <EditIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Delete" aria-label="Delete">
-            <IconButton aria-label="Delete" onClick={() => onDeleteButtonClicked(id)}>
+            <IconButton aria-label="Delete" onClick={() => onDeleteButtonClicked(title)}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Share" aria-label="Share">
-            <IconButton aria-label="Share" onClick={() => onCardActionClicked(id, 'SHARE')}>
+            <IconButton aria-label="Share" onClick={() => onCardActionClicked(title, 'SHARE')}>
               <ShareIcon />
             </IconButton>
           </Tooltip>
