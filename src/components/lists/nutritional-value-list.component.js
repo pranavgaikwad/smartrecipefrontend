@@ -5,15 +5,12 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
 
 class NutritionalValueListItem extends React.Component {
   render() {
-    const { classes, name, val, quantity } = this.props;
+    const { classes, name, val } = this.props;
 
     const description = `${name} (${val})`
 
@@ -105,7 +102,3 @@ const styles = theme => ({
 });
 
 export default withStyles(styles)(NutritionalValueListComponent);
-
-/*
-
- */
