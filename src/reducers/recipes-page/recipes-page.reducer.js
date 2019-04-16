@@ -2,57 +2,63 @@ import initialState from './initial.state';
 import { actionsRecipes } from '../../utils/app.constants';
 
 /**
+ * Updates the recipes list in the state and brings the recommended recipe to the front
+ * @param  {[Object]} recipes           Existing recipes
+ * @param  {Object} recommendedRecipe   Recommended recipe
+ * @return {[Object]}                     Recipes
+ */
+function registerRecommendedRecipe(recipes, recommendedRecipe) {
+    let index = null;
+    index = recipes.findIndex(x=> x.name === recommendedRecipe.name);
+    if (index != -1) {
+      recipes.splice(index, 1);
+    }
+    const recipe = {
+      ...recommendedRecipe,
+      recommended: true,
+    };
+    let updatedRecipes = [];
+    if (recipe) updatedRecipes = [recipe, ...recipes];
+    return updatedRecipes;
+}
+
+/**
  * Reducer responsible for handling actions performed on Recipes page
  * @param  {Object} state  Initial State to start 
  * @param  {Object} action Which action to perform
  * @return {Object}        New State 
  */
 export default function recipesReducer(state = initialState, action = {}) {
- const { recipes } = state;
+ const { recipes, recommendedRecipes } = state;
  
  let recipe = null;
+ let newRecipes = null;
 
  if (action.recipe) recipe = action.recipe;
 
+ if (action.recipes) newRecipes = action.recipes;
+
  let updatedRecipes = [];
 
- let index = null;
+ const {  } = state;
 
  switch (action.type) {
     case actionsRecipes.add:
-      let found = false;
-      for (var i = 0; i < recipes.length; i++) {
-        if (recipes[i].id === action.recipe.id) {
-          recipes[i] = action.recipe;
-          found = true;
-        }
+      recipes.push(action.recipe);
+      
+      if (recommendedRecipes.length > 0) {
+        updatedRecipes = registerRecommendedRecipe(recipes, recommendedRecipes[0]);
       }
-      if (!found) {
-        recipes.push(action.recipe);
-      }
+      
       return {
         ...state,
-        recipes,
+        recipes: updatedRecipes,
       };
 
     case actionsRecipes.get:
-      return {
-        ...state,
-        recipes: action.recipes,
-        isFailed: false,
-        isPending: false,
-      };
-
-    case actionsRecipes.recommend:
-      index = state.recipes.findIndex(x=> x.name === recipe.name);
-      if (index != -1) {
-        state.recipes.splice(index, 1);
+      if (recommendedRecipes.length > 0) {
+        updatedRecipes = registerRecommendedRecipe(newRecipes, recommendedRecipes[0]);
       }
-      recipe = {
-        ...recipe,
-        recommended: true,
-      }
-      if (recipe) updatedRecipes = [recipe, ...state.recipes];
       return {
         ...state,
         recipes: updatedRecipes,
@@ -60,8 +66,21 @@ export default function recipesReducer(state = initialState, action = {}) {
         isPending: false,
       };
 
+    case actionsRecipes.recommend:
+      console.log("Recommending", recommendedRecipes);
+
+      recommendedRecipes.push(recipe);
+      updatedRecipes = registerRecommendedRecipe(recipes, recipe);
+      return {
+        ...state,
+        recipes: updatedRecipes,
+        isFailed: false,
+        isPending: false,
+        recommendedRecipes,
+      };
+
     case actionsRecipes.update:
-      index = state.recipes.findIndex(x=> x.name === recipe.name);
+      let index = recipes.findIndex(x=> x.name === recipe.name);
       if (index != -1) {
         updatedRecipes = [
           ...state.recipes.slice(0, index),
