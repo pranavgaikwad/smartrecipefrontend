@@ -10,11 +10,12 @@ export const apiConstants = {
     baseUrl: process.env.REACT_APP_API_BASE_URL,
     signin: 'signon?action=login',
     signup: 'signon?action=sign_up',
-    getRecipes: 'cookbook?action=get_recipes',
+    updateUser: 'user?action=update',
     addRecipe: 'cookbook?action=add_recipe',
     editRecipe: 'cookbook?action=edit_recipe',
+    getRecipes: 'cookbook?action=get_recipes',
     searchRecipes: 'cookbook?action=search_recipes',
-    updateUser: 'user?action=update',
+    getRecommendedRecipes: 'cookbook?action=recommend_recipe',
 };  
 
 // constants related to in-memory ORM models 
@@ -67,13 +68,14 @@ export const actionsIngredients = {
 
 // constants related to recipe actions
 export const actionsRecipes = {
-    get: "ACTION_GET_INGREDIENTS",
     add: "ACTION_ADD_RECIPE",
-    delete: "ACTION_DELETE_RECIPE",
-    update: "ACTION_UPDATE_RECIPE",
     pending: "REQUEST_PENDING",
     success: "REQUEST_SUCCESS",
     failed: "REQUEST_FAIL",
+    get: "ACTION_GET_INGREDIENTS",
+    delete: "ACTION_DELETE_RECIPE",
+    update: "ACTION_UPDATE_RECIPE",
+    recommend: "ACTION_GET_RECOMMEND",
 };
 
 // constants related to navigation reducer
