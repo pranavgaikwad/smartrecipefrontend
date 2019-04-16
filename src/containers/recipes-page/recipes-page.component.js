@@ -255,9 +255,56 @@ class RecipesPageContainer extends Component {
           recipe,
         });
         break;
+      case 'FAVORITE':
+
+        break;
       default:
         break;
     }
+  }
+
+  registerFavorites(recipes) {
+    const { user } = this.props;
+    const { cookbook } = user;
+    const { favorites } = cookbook;
+    let updatedRecipes = Object.assign([], recipes);
+
+    let i = 0;
+    for (i=0; i < favorites.length; i++) {
+      let favoriteRecipe = favorites[i];
+      favoriteRecipe = {
+        ...favoriteRecipe,
+        isFavorite: true,
+      };
+      let index = updatedRecipes.findIndex(x=> x.name === favoriteRecipe.name);
+      if (index != -1) {
+        updatedRecipes.splice(index, 1);
+        updatedRecipes = [
+          favoriteRecipe,
+          ...updatedRecipes,
+        ];   
+      }
+    }
+    return updatedRecipes;
+  }
+
+  registerRecommendedRecipe(recipes) {
+    let { recommendedRecipe } = this.props;
+    recommendedRecipe = {
+      ...recommendedRecipe,
+      recommended: true,
+    };
+    let updatedRecipes = Object.assign([], recipes); 
+
+    let index = updatedRecipes.findIndex(x=> x.name === recommendedRecipe.name);
+    if (index != -1) {
+      updatedRecipes.splice(index, 1);
+      updatedRecipes = [
+        recommendedRecipe, 
+        ...updatedRecipes,
+      ];
+    }
+    return updatedRecipes;
   }
 
   /**
@@ -266,16 +313,21 @@ class RecipesPageContainer extends Component {
    * @param  {Array} recipes List of recipes
    */
   getRecipesGrid(recipes) {
-    const totalRecipes = recipes.length;
+    recipes = this.registerFavorites(recipes);
+
+    recipes = this.registerRecommendedRecipe(recipes);
 
     let recipeItemComponents = []
 
-    for (var i = 0; i < totalRecipes; i++) {
+    for (var i = 0; i < recipes.length; i++) {
       const currentRecipe = recipes[i];
 
+      let isFavorite = false;
       let isRecommended = false;
 
       if (currentRecipe.recommended) isRecommended = true;
+
+      if (currentRecipe.isFavorite) isFavorite = true;
 
       if ((currentRecipe !== undefined) && (currentRecipe !== null)) {
         recipeItemComponents.push(
@@ -290,6 +342,7 @@ class RecipesPageContainer extends Component {
               id={i}
               key={i}
               recipe={currentRecipe}
+              isFavorite={isFavorite}
               recommended={isRecommended}
               onCardActionClicked={this.onCardActionClicked}
               onDeleteButtonClicked={this.onRecipeDeleteButtonClicked}
@@ -427,6 +480,7 @@ const mapStateToProps = state => ({
   currentRoute: state.navigationReducer.currentRoute,
   recipesRequestFailed: state.recipesReducer.isFailed,
   recipesRequestPending: state.recipesReducer.isPending,
+  recommendedRecipe: state.recipesReducer.recommendedRecipe,
 });
 
 
