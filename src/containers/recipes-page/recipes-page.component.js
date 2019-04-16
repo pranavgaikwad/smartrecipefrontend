@@ -224,8 +224,13 @@ class RecipesPageContainer extends Component {
     this.props.deleteRecipe(id);
   }
 
-  onCardActionClicked(id, action) {
-    const recipe = this.props.recipes[id];
+  onCardActionClicked(id, action, isDisabled) {
+    let recipe = this.props.recipes[id];
+
+    recipe = {
+      ...recipe, 
+      disabled: isDisabled,
+    }
 
     switch(action) {
       case 'EDIT':
@@ -293,6 +298,7 @@ class RecipesPageContainer extends Component {
     recommendedRecipe = {
       ...recommendedRecipe,
       recommended: true,
+      disabled: false,
     };
     let updatedRecipes = Object.assign([], recipes); 
 
@@ -317,17 +323,20 @@ class RecipesPageContainer extends Component {
 
     recipes = this.registerRecommendedRecipe(recipes);
 
-    let recipeItemComponents = []
+    let recipeItemComponents = [];
 
     for (var i = 0; i < recipes.length; i++) {
       const currentRecipe = recipes[i];
 
+      let disabled = true;
       let isFavorite = false;
       let isRecommended = false;
 
       if (currentRecipe.recommended) isRecommended = true;
 
       if (currentRecipe.isFavorite) isFavorite = true;
+
+      if (currentRecipe.disabled == false) disabled = currentRecipe.disabled;
 
       if ((currentRecipe !== undefined) && (currentRecipe !== null)) {
         recipeItemComponents.push(
@@ -341,6 +350,7 @@ class RecipesPageContainer extends Component {
             <RecipeCardComponent
               id={i}
               key={i}
+              disabled={disabled}
               recipe={currentRecipe}
               isFavorite={isFavorite}
               recommended={isRecommended}
