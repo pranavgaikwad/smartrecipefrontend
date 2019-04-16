@@ -34,6 +34,12 @@ const avatarColors = [
   brown[500], deepPurple[500], yellow[900], lightGreen[900], amber[500]
 ];
 
+const iconColors = [
+  red[900], blue[900], pink[900], cyan[900], lightBlue[900],
+  teal[900], lime[900], green[900], orange[900], purple[900],
+  brown[900], deepPurple[900], yellow[900], lightGreen[900], amber[900]
+];
+
 /**
  * Generic Card component to show recipe information
  */
@@ -43,15 +49,25 @@ class RecipeCardComponent extends React.Component {
 
     this.state = {
       avatarColor: red[500],
+      time: 0,
     }
 
     this.avatarColor = red[500];
+    this.startTimer = this.startTimer.bind(this);
+  }
+
+  startTimer() {
+    this.timer = setInterval(() => this.setState({
+      iconColor: avatarColors[Math.floor(Math.random()*iconColors.length)],
+    }), 2000);
   }
 
   componentDidMount() {
     this.setState({
       avatarColor: avatarColors[Math.floor(Math.random()*avatarColors.length)],
     });
+
+    this.startTimer();
   }
 
   render() {
@@ -59,6 +75,7 @@ class RecipeCardComponent extends React.Component {
       id,
       recipe,
       classes, 
+      isFavorite,
       recommended,
       onCardActionClicked,
       onDeleteButtonClicked,
@@ -74,6 +91,8 @@ class RecipeCardComponent extends React.Component {
     if (title) {
       avatar = title[0];
     }
+
+    const favoriteIconColor = isFavorite ? red[700] : null;
 
     // const showIngredientChips = (ingredients.length === 0) ? false : true;
     
@@ -99,26 +118,36 @@ class RecipeCardComponent extends React.Component {
 
         {/* Card Footer */}
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="View" onClick={() => onCardActionClicked(id, 'VIEW')}>
-            <VisibilityIcon />
-          </IconButton>
-          <IconButton aria-label="Add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="Edit" onClick={() => onCardActionClicked(id, 'EDIT')}>
-            <EditIcon />
-          </IconButton>
-          <IconButton aria-label="Delete" onClick={() => onDeleteButtonClicked(id)}>
-            <DeleteIcon />
-          </IconButton>
-          <IconButton aria-label="Share" onClick={() => onCardActionClicked(id, 'SHARE')}>
-            <ShareIcon />
-          </IconButton>
+          <Tooltip title="View" aria-label="View">
+            <IconButton aria-label="View" onClick={() => onCardActionClicked(id, 'VIEW')}>
+              <VisibilityIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Favourite" aria-label="Favourite">
+            <IconButton style={{ color: favoriteIconColor }} aria-label="Add to favorites" onClick={() => onCardActionClicked(id, 'FAVORITE')}>
+              <FavoriteIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Edit" aria-label="Edit">
+            <IconButton aria-label="Edit" onClick={() => onCardActionClicked(id, 'EDIT')}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete" aria-label="Delete">
+            <IconButton aria-label="Delete" onClick={() => onDeleteButtonClicked(id)}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Share" aria-label="Share">
+            <IconButton aria-label="Share" onClick={() => onCardActionClicked(id, 'SHARE')}>
+              <ShareIcon />
+            </IconButton>
+          </Tooltip>
           {
             recommended && 
-            <Tooltip title="Recommended" aria-label="Add">
+            <Tooltip title="Recommended" aria-label="Recommended">
               <IconButton aria-label="Recommended">
-                <NewReleasesIcon className={classes.icon}/>
+                <NewReleasesIcon style={{ color: this.state.iconColor }}/>
               </IconButton>
             </Tooltip>
           }
@@ -151,19 +180,6 @@ const styles = theme => ({
     display: 'flex',
     align: 'bottom',
   },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  icon: {
-    color: orange[900],
-  }
 });
 
 RecipeCardComponent.propTypes = {
