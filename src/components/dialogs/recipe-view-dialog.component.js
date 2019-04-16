@@ -24,10 +24,18 @@ class RecipeViewCard extends Component {
     
     const {
       name: title, 
-      instructions: description,
       disabled,
       ingredients,
+      nutVal,
+      instructions: description,
     } = recipe;
+
+    const {
+      calories, totalFat,
+      saturatedFat, transFat,
+      carbs, fiber, sugar,
+      protein, cholesterol, sodium,
+    } = nutVal;
 
     const showIngredientList = (ingredients.length === 0) ? false : true;
 
@@ -52,6 +60,14 @@ class RecipeViewCard extends Component {
           </Typography>
           <Typography component="p">
             {description} 
+          </Typography>
+          <Typography component="h6" variant="h6" className={classes.typography}>
+            Nutritional Value
+          </Typography>
+          <Typography component="p">
+            Calories : {calories},  Total Fat: {totalFat}, Saturated Fat : {saturatedFat},
+            Trans Fat : {transFat}, Carbs : {carbs}, Fiber : {fiber}, Sugar : {sugar},
+            Protein : {protein}, Cholesterol : {cholesterol}, Sodium : {sodium}
           </Typography>
         </DialogContent>
         <DialogActions>
