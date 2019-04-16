@@ -107,7 +107,7 @@ class RecipeCardComponent extends React.Component {
         <CardHeader
           classes={{title: titleClass, subheader: titleClass}}
           avatar={
-            <Avatar aria-label="Recipe" style={{ backgroundColor: disabled ? this.state.disabledAvatarColor : this.state.avatarColor }}>
+            <Avatar aria-label="Recipe" style={{ backgroundColor: disabled ? this.disabledAvatarColor : this.state.avatarColor }}>
               {avatar}
             </Avatar>
           }
@@ -130,7 +130,7 @@ class RecipeCardComponent extends React.Component {
             </IconButton>
           </Tooltip>
           <Tooltip title="Favourite" aria-label="Favourite">
-            <IconButton style={{ color: favoriteIconColor }} aria-label="Add to favorites" onClick={() => onCardActionClicked(id, 'FAVORITE')}>
+            <IconButton style={{ color: favoriteIconColor }} aria-label="Add to favorites" onClick={() => onCardActionClicked(id, 'FAVORITE', disabled, isFavorite)}>
               <FavoriteIcon />
             </IconButton>
           </Tooltip>
