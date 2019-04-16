@@ -104,15 +104,19 @@ export function getRecipes() {
  * Get list of recipes
  * @return {[Object]} List of recipes
  */
-export function getRecommendedRecipes() {
+export function getRecommendedRecipes(user) {
+  const requestBody = {
+    user: user,
+  };  
+
   return (dispatch) => {
     dispatch(setRequestPending());
 
-    apiProxy.get(`${apiConstants.baseUrl}${apiConstants.getRecommendedRecipes}`, '123')
+    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.getRecommendedRecipes}`, requestBody, '123')
     .then((response) => {
       let recipe = null;
       if (response.recipe) {
-        recipe = response;
+        recipe = response.recipe;
       }
       dispatch(recommend(recipe));
     })
