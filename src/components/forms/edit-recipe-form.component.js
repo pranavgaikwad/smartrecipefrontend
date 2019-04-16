@@ -16,7 +16,8 @@ import IngredientListComponent from '../lists/ingredients-list.component';
  */
 class EditRecipeFormComponent extends Component {
   render() {
-    const { 
+    const {
+      user,
       recipe, // recipe 
       classes,
       onSubmit, // submit function passed from parent component
@@ -34,10 +35,13 @@ class EditRecipeFormComponent extends Component {
       ingredients = recipe.ingredients;
     }
 
-    let { allIngredients } = this.props;
+    let allIngredients = [];
 
-    if (!allIngredients || allIngredients === undefined) {
-      allIngredients = [];
+    const { fridge } = user;
+
+    if (fridge) {
+      const { ingredients } = fridge;
+      allIngredients = ingredients;
     }
 
     const showIngredientsDropdown = true ? allIngredients.length > 0 : false;
@@ -130,7 +134,7 @@ EditRecipeFormComponent.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  allIngredients: state.ingredientsReducer.ingredients,
+  user: state.authReducer.user,
 });
 
 
