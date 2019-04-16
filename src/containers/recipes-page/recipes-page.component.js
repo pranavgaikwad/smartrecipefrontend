@@ -12,9 +12,14 @@ import {
   addRecipe, 
   getRecipes, 
   editRecipe,
-  deleteRecipe, 
+  deleteRecipe,
+  addToFavorite,
   getRecommendedRecipes,
 } from '../../actions/recipes-page/recipes-page.actions';
+
+import { 
+  updateUser, 
+} from '../../actions/auth/auth.actions';
 
 import RecipeCardComponent from '../../components/cards/recipe-card.component';
 import AddRecipeDialog from '../../components/dialogs/add-recipe-dialog.component';
@@ -224,12 +229,42 @@ class RecipesPageContainer extends Component {
     this.props.deleteRecipe(id);
   }
 
-  onCardActionClicked(id, action, isDisabled) {
+  addToFavorite(recipe, isFavorite) {
+    let { user } = this.props;
+    let { cookbook } = user;
+    let { favorites } = cookbook;
+
+    if (!isFavorite){
+      favorites.push(recipe);
+    }
+    else {
+      console.log(favorites);
+      const index = favorites.findIndex(x=> x.name === recipe.name);
+      console.log(index);
+      if (index != -1) {
+        favorites.splice(index, 1);
+        console.log("Removed from favorites", favorites);
+      }
+    }
+
+    user = {
+      ...user,
+      cookbook: {
+        ...cookbook,
+        favorites,
+      }
+    };
+
+    this.props.updateUser(user);
+  }
+
+  onCardActionClicked(id, action, isDisabled, isFavorite) {
     let recipe = this.props.recipes[id];
 
     recipe = {
       ...recipe, 
       disabled: isDisabled,
+      isFavorite: isFavorite,
     }
 
     switch(action) {
@@ -261,7 +296,7 @@ class RecipesPageContainer extends Component {
         });
         break;
       case 'FAVORITE':
-
+        this.addToFavorite(recipe, isFavorite);
         break;
       default:
         break;
@@ -496,9 +531,11 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getRecipes: () => dispatch(getRecipes()),
+  updateUser: (user) => dispatch(updateUser(user)),
   deleteRecipe: (id) => dispatch(deleteRecipe(id)),
   addRecipe: (recipe) => dispatch(addRecipe(recipe)),
   editRecipe: (recipe) => dispatch(editRecipe(recipe)),
+  addToFavorite: (user) => dispatch(addToFavorite(user)),
   getRecommendedRecipes: (user) => dispatch(getRecommendedRecipes(user)),
 });
 
