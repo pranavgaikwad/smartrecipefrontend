@@ -16,7 +16,7 @@ import {
   teal, lime,
   green, brown,
   orange, purple,
-  yellow, lightGreen,
+  yellow, lightGreen, grey,
   lightBlue, deepPurple, amber,
 } from '@material-ui/core/colors';
 
@@ -39,6 +39,8 @@ const iconColors = [
   teal[900], lime[900], green[900], orange[900], purple[900],
   brown[900], deepPurple[900], yellow[900], lightGreen[900], amber[900]
 ];
+
+const disabledAvatarColor = [grey[500]];
 
 /**
  * Generic Card component to show recipe information
@@ -75,6 +77,7 @@ class RecipeCardComponent extends React.Component {
       id,
       recipe,
       classes, 
+      disabled,
       isFavorite,
       recommended,
       onCardActionClicked,
@@ -96,12 +99,15 @@ class RecipeCardComponent extends React.Component {
 
     // const showIngredientChips = (ingredients.length === 0) ? false : true;
     
+    const titleClass = disabled ? classes.title : null;
+    
     return (
       <Card className={classes.card}>
         {/* Card Top Header */}
         <CardHeader
+          classes={{title: titleClass, subheader: titleClass}}
           avatar={
-            <Avatar aria-label="Recipe" style={{ backgroundColor: this.state.avatarColor }}>
+            <Avatar aria-label="Recipe" style={{ backgroundColor: disabled ? this.state.disabledAvatarColor : this.state.avatarColor }}>
               {avatar}
             </Avatar>
           }
@@ -119,7 +125,7 @@ class RecipeCardComponent extends React.Component {
         {/* Card Footer */}
         <CardActions className={classes.actions} disableActionSpacing>
           <Tooltip title="View" aria-label="View">
-            <IconButton aria-label="View" onClick={() => onCardActionClicked(id, 'VIEW')}>
+            <IconButton aria-label="View" onClick={() => onCardActionClicked(id, 'VIEW', disabled)}>
               <VisibilityIcon />
             </IconButton>
           </Tooltip>
@@ -179,6 +185,9 @@ const styles = theme => ({
   actions: {
     display: 'flex',
     align: 'bottom',
+  },
+  title: { 
+    color: grey[500],
   },
 });
 
