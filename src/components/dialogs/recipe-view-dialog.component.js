@@ -9,6 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
 import IngredientListComponent from '../lists/ingredients-list.component';
+import NutritionalValueListComponent from '../lists/nutritional-value-list.component';
 
 /**
  * Dialog which shows recipe in a detailed view
@@ -64,11 +65,7 @@ class RecipeViewCard extends Component {
           <Typography component="h6" variant="h6" className={classes.typography}>
             Nutritional Value
           </Typography>
-          <Typography component="p">
-            Calories : {calories},  Total Fat: {totalFat}, Saturated Fat : {saturatedFat},
-            Trans Fat : {transFat}, Carbs : {carbs}, Fiber : {fiber}, Sugar : {sugar},
-            Protein : {protein}, Cholesterol : {cholesterol}, Sodium : {sodium}
-          </Typography>
+          <NutritionalValueListComponent nutVal={nutVal}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="primary">
