@@ -335,7 +335,9 @@ class RecipesPageContainer extends Component {
   registerRecommendedRecipe(recipes) {
     let { recommendedRecipe } = this.props;
 
-    let index = recipes.findIndex(x=> x.name === recommendedRecipe.name);
+    let index = -1; 
+    
+    if (recommendedRecipe) index = recipes.findIndex(x=> x.name === recommendedRecipe.name);
 
     if (index != -1) recommendedRecipe = recipes[index];
 
