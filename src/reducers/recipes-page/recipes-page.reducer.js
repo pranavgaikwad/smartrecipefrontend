@@ -29,7 +29,7 @@ function registerRecommendedRecipe(recipes, recommendedRecipe) {
  * @return {Object}        New State 
  */
 export default function recipesReducer(state = initialState, action = {}) {
- const { recipes, recommendedRecipes } = state;
+ const { recipes, recommendedRecipe } = state;
  
  let recipe = null;
  let newRecipes = null;
@@ -46,37 +46,32 @@ export default function recipesReducer(state = initialState, action = {}) {
     case actionsRecipes.add:
       recipes.push(action.recipe);
       
-      if (recommendedRecipes.length > 0) {
-        updatedRecipes = registerRecommendedRecipe(recipes, recommendedRecipes[0]);
-      }
+      // if (recommendedRecipes.length > 0) {
+      //   updatedRecipes = registerRecommendedRecipe(recipes, recommendedRecipes[0]);
+      // }
       
       return {
         ...state,
-        recipes: updatedRecipes,
+        recipes,
       };
 
     case actionsRecipes.get:
-      if (recommendedRecipes.length > 0) {
-        updatedRecipes = registerRecommendedRecipe(newRecipes, recommendedRecipes[0]);
-      }
+      // if (recommendedRecipes.length > 0) {
+      //   updatedRecipes = registerRecommendedRecipe(newRecipes, recommendedRecipes[0]);
+      // }
       return {
         ...state,
-        recipes: updatedRecipes,
+        recipes: action.recipes,
         isFailed: false,
         isPending: false,
       };
 
     case actionsRecipes.recommend:
-      console.log("Recommending", recommendedRecipes);
-
-      recommendedRecipes.push(recipe);
-      updatedRecipes = registerRecommendedRecipe(recipes, recipe);
       return {
         ...state,
-        recipes: updatedRecipes,
         isFailed: false,
         isPending: false,
-        recommendedRecipes,
+        recommendedRecipe: recipe,
       };
 
     case actionsRecipes.update:
