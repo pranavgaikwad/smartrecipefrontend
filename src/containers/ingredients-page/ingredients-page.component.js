@@ -108,7 +108,7 @@ class IngredientsPageContainer extends Component {
     const { target } = e;
 
     switch (target.id) {
-      case 'title':
+      case 'ingredientTitle':
         this.setState({
           ingredient: {
             ...this.state.ingredient,
@@ -236,11 +236,12 @@ class IngredientsPageContainer extends Component {
           {
             <AddIngredientDialog
               open={showDialog} 
+              ingredient={ingredient}
               onClose={this.onDialogClosed} 
               onSubmit={this.onDialogSubmit} 
               onFormChange={this.onDialogFormChange}
               onUnitChange={this.onIngredientUnitChange}
-              ingredient={ingredient}/>
+            />
           }
           {
             ingredientsGrid
