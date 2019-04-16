@@ -24,6 +24,14 @@ function get(recipes) {
   return { type: actionsRecipes.get, recipes };
 }
 
+/**
+ * Populates redux store with recommended recipe
+ * @param  {[Object]} Recommended recipe
+ */
+function recommend(recipe) {
+  return { type: actionsRecipes.recommend, recipe };
+}
+
 function update(recipe) {
   return { type: actionsRecipes.update, recipe }; 
 }
@@ -91,6 +99,29 @@ export function getRecipes() {
     });
   };
 }
+
+/**
+ * Get list of recipes
+ * @return {[Object]} List of recipes
+ */
+export function getRecommendedRecipes() {
+  return (dispatch) => {
+    dispatch(setRequestPending());
+
+    apiProxy.get(`${apiConstants.baseUrl}${apiConstants.getRecommendedRecipes}`, '123')
+    .then((response) => {
+      let recipe = null;
+      if (response.recipe) {
+        recipe = response;
+      }
+      dispatch(recommend(recipe));
+    })
+    .catch((e) => { // eslint-disable-line
+      dispatch(setRequestFailed());
+    });
+  };
+}
+
 
 
 /**
