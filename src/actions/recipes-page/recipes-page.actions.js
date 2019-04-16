@@ -126,7 +126,26 @@ export function getRecommendedRecipes(user) {
   };
 }
 
+/**
+ * Delete a recipe
+ * @param {Object} recipe 
+ */
+export function addToFavorite(user, recipe) {
+  let requestBody = {
+    user: user,
+  }
+  return (dispatch) => {
+    dispatch(setRequestPending());
 
+    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.favouriteRecipe}`, requestBody, '123')
+    .then((response) => {
+      console.log("Added to favorite -->", response);
+    })
+    .catch((e) => { // eslint-disable-line
+      dispatch(setRequestFailed());
+    })
+  };
+}
 
 /**
  * Delete a recipe
