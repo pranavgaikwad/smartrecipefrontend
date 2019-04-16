@@ -8,20 +8,22 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 
 class IngredientListItem extends React.Component {
   render() {
-    const { classes, text, onDelete } = this.props;
+    const { classes, text, quantity, unit, onDelete } = this.props;
 
     const showDelete = (onDelete !== undefined) ? true : false;
+
+    const description = `${text} (${quantity} ${unit})`
 
     return (
       <div>
         <ListItem className={classes.demo}>
           <ListItemText
-            primary={text}
+            primary={description}
             // secondary={secondary ? 'Secondary text' : null}
           />
           <ListItemSecondaryAction>
@@ -60,12 +62,14 @@ class IngredientListComponent extends React.Component {
                         key={id} 
                         container
                         spacing={0}
-                        justify="left"
-                        alignItems="left"
+                        justify="flex-start"
+                        alignItems="flex-start"
                         xs={12} sm={12} md={4} lg={6} xl={6}>
                           <IngredientListItem 
                             key={id} 
-                            text={data.name} 
+                            text={data.name}
+                            quantity={data.quantity}
+                            unit={data.unit}
                             classes={classes} 
                             onDelete={(handleDelete !== undefined) ? () => handleDelete(id) : undefined}
                           />
