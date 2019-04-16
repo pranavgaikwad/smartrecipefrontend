@@ -37,6 +37,12 @@ export const menuItemProps = {
         title: "Ingredients",
         route: "/ingredients",
     },
+    recommendationsMenu: {
+        id: 3,
+        key: "recommendations", 
+        title: "Recommendations",
+        route: "/recommendations",
+    },
 }
 
 // constants related to user sign in actions
