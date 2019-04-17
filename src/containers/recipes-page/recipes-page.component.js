@@ -29,7 +29,7 @@ import RecipeViewComponent from '../../components/dialogs/recipe-view-dialog.com
 import RecipeShareComponent from '../../components/dialogs/social-share-dialog.component';
 import AddIngredientDialog from '../../components/dialogs/add-ingredient-dialog.component';
 
-const newRecipe = { name: '', desc: '', instructions: '', ingredients: [], nutVal: {} };
+const newRecipe = { name: '', desc: '', instructions: '', ingredients: [], nutVal: {}, flavorTags: [] };
 
 const newIngredient = { name: "", quantity: "", unit: "" };
 
@@ -55,7 +55,9 @@ class RecipesPageContainer extends Component {
     this.onDialogFormChange = this.onDialogFormChange.bind(this);
     this.onAddButtonClicked = this.onAddButtonClicked.bind(this);
     this.onCardActionClicked = this.onCardActionClicked.bind(this);
+    this.onFormFlavorTagAdded = this.onFormFlavorTagAdded.bind(this);
     this.onFormIngredientAdded = this.onFormIngredientAdded.bind(this);
+    this.onFormFlavorTagDeleted = this.onFormFlavorTagDeleted.bind(this);
     this.onFormIngredientDeleted = this.onFormIngredientDeleted.bind(this);
     this.onRecipeDeleteButtonClicked = this.onRecipeDeleteButtonClicked.bind(this);
     this.onAddIngredientDialogClosed = this.onAddIngredientDialogClosed.bind(this);
@@ -106,6 +108,21 @@ class RecipesPageContainer extends Component {
           };
         });
       }
+  }
+
+  onFormFlavorTagDeleted() {
+
+  }
+
+  onFormFlavorTagAdded(value) {
+    let recipe = Object.assign({}, this.state.recipe);
+    let { flavorTags } = recipe;
+    flavorTags.push(value);
+    recipe.flavorTags = flavorTags;
+    console.log(recipe);
+    this.setState({
+      recipe,
+    });
   }
 
   /**
@@ -528,6 +545,7 @@ class RecipesPageContainer extends Component {
               onSubmit={this.onDialogSubmit} 
               onClose={this.onCardViewClosed} 
               onFormChange={this.onDialogFormChange}
+              onFlavorTagAdded={this.onFormFlavorTagAdded}
               onIngredientAdded={this.onFormIngredientAdded}
               onIngredientDeleted={this.onFormIngredientDeleted}/>
           }
