@@ -100,9 +100,11 @@ class RecipesPageContainer extends Component {
   }
 
   onFlavorTagRequestSubmit(tags) {
+    const { user } = this.props;
+
     this.onCardViewClosed();
 
-    console.log("DPKG : Received tags for filters -->", tags);
+    if (user) this.props.searchRecipes(user, tags);
   }
 
   onFilterButtonClicked() {
