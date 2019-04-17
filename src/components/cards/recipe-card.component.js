@@ -72,6 +72,10 @@ class RecipeCardComponent extends React.Component {
     this.startTimer();
   }
 
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
   render() {
     const { 
       id,
