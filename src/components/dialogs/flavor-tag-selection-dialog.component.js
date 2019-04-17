@@ -17,6 +17,7 @@ class FlavorTagSelectionDialog extends Component {
       checked: [],
     };
 
+    this.onRequestSubmit = this.onRequestSubmit.bind(this);
     this.onFlavorTagChecked = this.onFlavorTagChecked.bind(this);
   }
 
@@ -44,6 +45,12 @@ class FlavorTagSelectionDialog extends Component {
     });
   }
 
+  onRequestSubmit(tags, nextFunction) {
+    this.setState({ checked: [] });
+
+    nextFunction(tags);
+  }
+
   render() {
     const { 
       open,
@@ -64,7 +71,7 @@ class FlavorTagSelectionDialog extends Component {
           <Button onClick={onClose} color="secondary">
             Cancel
           </Button>
-          <Button onClick={() => onSubmit(this.state.checked)} color="primary">
+          <Button onClick={() => this.onRequestSubmit(this.state.checked, onSubmit)} color="primary">
             Save
           </Button>
         </DialogActions>
