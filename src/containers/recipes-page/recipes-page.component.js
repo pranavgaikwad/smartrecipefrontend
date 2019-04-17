@@ -428,7 +428,8 @@ class RecipesPageContainer extends Component {
       let remainingRecipe = remainingRecipes[i];
       index = favorites.findIndex(x=> x.name === remainingRecipe.name);
       if (index != -1) {
-        updatedRecipes.splice(index, 1);
+        index = updatedRecipes.findIndex(x => x.name === remainingRecipe.name);
+        if (index != -1) updatedRecipes.splice(index, 1);
         remainingRecipe = {
           ...remainingRecipe,
           isFavorite: true,
@@ -437,14 +438,10 @@ class RecipesPageContainer extends Component {
       }
     }
 
-    favoriteRemaining = [
-      ...favoriteRemaining,
-      ...updatedRecipes,
-    ];
-
     return [
       ...updatedSearchResults,
       ...favoriteRemaining,
+      ...updatedRecipes,
     ];
   }
 
