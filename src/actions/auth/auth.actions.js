@@ -124,7 +124,6 @@ export function updateUser(user) {
     })
     .catch((e) => { // eslint-disable-line
       dispatch(setRequestFailed());
-      console.log('Error updating ingredient', e);
     })
   };
 }
