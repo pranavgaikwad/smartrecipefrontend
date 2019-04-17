@@ -23,6 +23,7 @@ export default function recipesReducer(state = initialState, action = {}) {
 
  switch (action.type) {
     case actionsRecipes.add:
+      console.log("Adding recipe ", action.recipe);
       return {
         ...state,
         recipes: [
