@@ -46,7 +46,9 @@ class AddRecipeDialog extends Component {
       onClose,
       onSubmit,
       onFormChange,
+      onFlavorTagAdded,
       onIngredientAdded,
+      onFlavorTagDeleted,
       onIngredientDeleted,
     } = this.props;
 
@@ -57,7 +59,9 @@ class AddRecipeDialog extends Component {
           <EditRecipeFormComponent 
             recipe={recipe} 
             onFormChange={onFormChange} 
+            onFlavorTagAdded={onFlavorTagAdded}
             onIngredientAdded={onIngredientAdded} 
+            onFlavorTagDeleted={onFlavorTagDeleted}
             onIngredientDeleted={onIngredientDeleted}
           />
         </DialogContent>
