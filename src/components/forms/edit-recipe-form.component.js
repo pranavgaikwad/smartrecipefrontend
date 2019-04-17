@@ -9,6 +9,7 @@ import FormControl from '@material-ui/core/FormControl';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import IngredientListComponent from '../lists/ingredients-list.component';
+import FlavorTagsChipsComponent from '../chips/flavor-tags-chips.component';
 
 
 /**
@@ -22,18 +23,23 @@ class EditRecipeFormComponent extends Component {
       classes,
       onSubmit, // submit function passed from parent component
       onFormChange, // callback for handling updates in the form
+      onFlavorTagAdded, // when the user adds a new flavor tag to the recipe
       onIngredientAdded, // when user adds a new ingredient to the recipe
+      onFlavorTagDeleted, // when user deletes a flavor tag from the recipe
       onIngredientDeleted, // when user deletes an ingredient
     } = this.props;
 
-    let title = '', shortDescription = '', description = '', ingredients = []; 
+    let title = '', shortDescription = '', description = '', ingredients = [], flavorTags = []; 
     
     if (recipe !== null && recipe !== undefined && recipe) {
       title = recipe.name;
       shortDescription = recipe.desc; 
       description = recipe.instructions;
       ingredients = recipe.ingredients;
+      flavorTags = recipe.flavorTags;
     }
+
+    console.log("Got new recipe ", flavorTags);
 
     let allIngredients = [];
 
@@ -43,6 +49,8 @@ class EditRecipeFormComponent extends Component {
       const { ingredients } = fridge;
       allIngredients = ingredients;
     }
+
+    const showFlavourTags = true ? flavorTags.length > 0 : false;
 
     const showIngredientsDropdown = true ? allIngredients.length > 0 : false;
     
@@ -95,6 +103,29 @@ class EditRecipeFormComponent extends Component {
             <Typography component="p">
               Please add some ingredients...
             </Typography>
+          }
+          {
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="flavorTags">Add a flavor tag</InputLabel>
+              <Input 
+                id="flavorTags"
+                name="flavorTags" 
+                multiline 
+                rows='1' 
+                rowsMax='1' 
+                autoComplete="flavorTags"
+                onKeyPress={(ev) => {
+                    if (ev.key === 'Enter') {
+                      onFlavorTagAdded(ev.target.value)
+                      ev.preventDefault();
+                    }
+                  }} 
+              />
+            </FormControl>
+          }
+          {
+            showFlavourTags &&
+            <FlavorTagsChipsComponent flavorTags={flavorTags} handleDelete={onFlavorTagDeleted}/>
           }
         </form>
       </div>
