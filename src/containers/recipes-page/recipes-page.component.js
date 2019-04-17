@@ -4,6 +4,7 @@ import Fab from '@material-ui/core/Fab';
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
+import { createNotification } from 'react-redux-notify';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import AddIcon from '@material-ui/icons/Add';
@@ -23,11 +24,14 @@ import {
   updateUser, 
 } from '../../actions/auth/auth.actions';
 
+import { errorNotification } from '../../utils/notify.config'; 
+
 import RecipeCardComponent from '../../components/cards/recipe-card.component';
 import AddRecipeDialog from '../../components/dialogs/add-recipe-dialog.component';
 import RecipeViewComponent from '../../components/dialogs/recipe-view-dialog.component';
 import RecipeShareComponent from '../../components/dialogs/social-share-dialog.component';
 import AddIngredientDialog from '../../components/dialogs/add-ingredient-dialog.component';
+import FlavorTagSelectionDialog from '../../components/dialogs/flavor-tag-selection-dialog.component';
 
 const newRecipe = { name: '', desc: '', instructions: '', ingredients: [], nutVal: {}, flavorTags: [] };
 
@@ -46,6 +50,7 @@ class RecipesPageContainer extends Component {
       showShareDialog: false,
       showViewDialog: false,
       showEditDialog: false,
+      showFlavorFilterDialog: false,
       ingredientToAdd: newIngredient,
       showAddIngredientDialog: false,
       allFlavorTags: [],
@@ -58,8 +63,10 @@ class RecipesPageContainer extends Component {
     this.onCardActionClicked = this.onCardActionClicked.bind(this);
     this.onFormFlavorTagAdded = this.onFormFlavorTagAdded.bind(this);
     this.onFormIngredientAdded = this.onFormIngredientAdded.bind(this);
+    this.onFilterButtonClicked = this.onFilterButtonClicked.bind(this);
     this.onFormFlavorTagDeleted = this.onFormFlavorTagDeleted.bind(this);
     this.onFormIngredientDeleted = this.onFormIngredientDeleted.bind(this);
+    this.onFlavorTagRequestSubmit = this.onFlavorTagRequestSubmit.bind(this);
     this.onRecipeDeleteButtonClicked = this.onRecipeDeleteButtonClicked.bind(this);
     this.onAddIngredientDialogClosed = this.onAddIngredientDialogClosed.bind(this);
     this.onAddIngredientDialogSubmit = this.onAddIngredientDialogSubmit.bind(this);
@@ -81,6 +88,7 @@ class RecipesPageContainer extends Component {
       showViewDialog: false,
       showShareDialog: false,
       showEditDialog: false,
+      showFlavorFilterDialog: false,
     });
   }
 
@@ -89,6 +97,16 @@ class RecipesPageContainer extends Component {
       ingredientToAdd: newIngredient,
       showAddIngredientDialog: false,
     });
+  }
+
+  onFlavorTagRequestSubmit(tags) {
+    this.onCardViewClosed();
+
+    console.log("DPKG : Received tags for filters -->", tags);
+  }
+
+  onFilterButtonClicked() {
+    this.setState({ showFlavorFilterDialog: true });
   }
 
   onAddIngredientDialogSubmit() {
@@ -120,6 +138,7 @@ class RecipesPageContainer extends Component {
     this.setState({
       recipe,
     });
+    this.registerAllFlavorTags();
   }
 
   onFormFlavorTagAdded(value) {
@@ -130,6 +149,30 @@ class RecipesPageContainer extends Component {
     this.setState({
       recipe,
     });
+    this.registerAllFlavorTags();
+  }
+
+  validateRecipe(recipe) {
+    const {
+      name,
+      desc,
+      instructions
+    } = recipe;
+
+    if (name === "") {
+      this.props.notify(errorNotification("Recipe must have a name"));
+      return false;
+    }
+
+    if (desc === "") {
+      this.props.notify(errorNotification("Recipe must have a short description"));
+      return false;
+    }
+
+    if (instructions === "") {
+      this.props.notify(errorNotification("Recipe must have instructions"));
+      return false;
+    }
   }
 
   /**
@@ -141,6 +184,11 @@ class RecipesPageContainer extends Component {
   onDialogSubmit(e, recipe) {
     const { editMode } = this.state;
 
+
+    const valid = this.validateRecipe(recipe);
+
+    if (!valid) return;
+    
     this.onCardViewClosed();
 
     if (editMode) {
@@ -502,6 +550,8 @@ class RecipesPageContainer extends Component {
     const { user, recommendedRecipe } = this.props;
 
     this.props.getRecipes();
+
+    this.registerAllFlavorTags();
     
     if (user) this.props.searchRecipes(user, [""]);
     
@@ -511,16 +561,27 @@ class RecipesPageContainer extends Component {
   }
 
   registerAllFlavorTags() {
-
+    const { recipes } = this.props;
+    let flavors = [];
+    for (var i = 0; i < recipes.length; i++) {
+      flavors = [
+        ...flavors,
+        ...recipes[i].flavorTags,
+      ];
+    }
+    flavors = Array.from(new Set(flavors));
+    this.setState({ allFlavorTags: flavors });
   }
 
   render() {
     const { 
-      recipe, 
+      recipe,
+      allFlavorTags,
       showEditDialog, 
       showViewDialog, 
       showShareDialog,
       ingredientToAdd,
+      showFlavorFilterDialog,
       showAddIngredientDialog,
     } = this.state;
 
@@ -539,9 +600,17 @@ class RecipesPageContainer extends Component {
           <Fab color="secondary" aria-label="Add" className={classes.fabAdd} onClick={this.onAddButtonClicked}>
             <AddIcon />
           </Fab>
-          <Fab color="secondary" aria-label="Filter" className={classes.fabFilter} onClick={this.onAddButtonClicked}>
+          <Fab color="secondary" aria-label="Filter" className={classes.fabFilter} onClick={this.onFilterButtonClicked}>
             <FilterListIcon />
           </Fab>
+          {
+            <FlavorTagSelectionDialog 
+              flavorTags={allFlavorTags}
+              open={showFlavorFilterDialog} 
+              onClose={this.onCardViewClosed}
+              onSubmit={this.onFlavorTagRequestSubmit}
+            />
+          }
           {
             recipesRequestPending &&
             <CircularProgress className={classes.progress} thickness={4} size={72}/>
@@ -651,6 +720,7 @@ const mapDispatchToProps = dispatch => ({
   addRecipe: (recipe) => dispatch(addRecipe(recipe)),
   editRecipe: (recipe) => dispatch(editRecipe(recipe)),
   addToFavorite: (user) => dispatch(addToFavorite(user)),
+  notify: (config) => dispatch(createNotification(config)),
   getRecommendedRecipes: (user) => dispatch(getRecommendedRecipes(user)),
   searchRecipes: (user, filters) => dispatch(searchRecipes(user, filters)),
 });
