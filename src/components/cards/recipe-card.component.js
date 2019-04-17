@@ -23,7 +23,7 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 import ShareIcon from '@material-ui/icons/Share';
 import DeleteIcon from '@material-ui/icons/Delete';
-import NewReleasesIcon from '@material-ui/icons/NewReleases';
+import StarIcon from '@material-ui/icons/Star';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
@@ -55,25 +55,12 @@ class RecipeCardComponent extends React.Component {
     }
 
     this.avatarColor = red[500];
-    this.startTimer = this.startTimer.bind(this);
-  }
-
-  startTimer() {
-    this.timer = setInterval(() => this.setState({
-      iconColor: avatarColors[Math.floor(Math.random()*iconColors.length)],
-    }), 2000);
   }
 
   componentDidMount() {
     this.setState({
       avatarColor: avatarColors[Math.floor(Math.random()*avatarColors.length)],
     });
-
-    this.startTimer();
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer);
   }
 
   render() {
@@ -143,11 +130,6 @@ class RecipeCardComponent extends React.Component {
               <EditIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Delete" aria-label="Delete">
-            <IconButton aria-label="Delete" onClick={() => onDeleteButtonClicked(title)}>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
           <Tooltip title="Share" aria-label="Share">
             <IconButton aria-label="Share" onClick={() => onCardActionClicked(title, 'SHARE')}>
               <ShareIcon />
@@ -157,7 +139,7 @@ class RecipeCardComponent extends React.Component {
             recommended && 
             <Tooltip title="Recommended" aria-label="Recommended">
               <IconButton aria-label="Recommended">
-                <NewReleasesIcon style={{ color: this.state.iconColor }}/>
+                <StarIcon className="rotating"/>
               </IconButton>
             </Tooltip>
           }
@@ -207,4 +189,11 @@ export default withStyles(styles)(RecipeCardComponent);
       ? <IngredientChipsComponent ingredients={ingredients}/> : 
       <Typography component="p">No ingredients...</Typography>
     }
+
+
+    <Tooltip title="Delete" aria-label="Delete">
+      <IconButton aria-label="Delete" onClick={() => onDeleteButtonClicked(title)}>
+        <DeleteIcon />
+      </IconButton>
+    </Tooltip>
 */
