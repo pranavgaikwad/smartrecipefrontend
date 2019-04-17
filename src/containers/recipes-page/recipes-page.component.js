@@ -371,11 +371,19 @@ class RecipesPageContainer extends Component {
         secondHalf.push(searchResult);
       }
     }
-    updatedSearchResults = [
-      updatedRecommendedRecipe,
-      ...firstHalf,
-      ...secondHalf,
-    ];
+
+    if (updatedRecommendedRecipe.length > 0) {
+      updatedSearchResults = [
+        updatedRecommendedRecipe,
+        ...firstHalf,
+        ...secondHalf,
+      ];
+    } else {
+      updatedSearchResults = [
+        ...firstHalf,
+        ...secondHalf,
+      ];
+    }
 
     for (i=0; i < updatedSearchResults.length; i++) {
       const result = updatedSearchResults[i];
@@ -495,6 +503,8 @@ class RecipesPageContainer extends Component {
    */
   getRecipesGrid(recipes) {
     recipes = this.processResults(recipes);
+
+    console.log("Displaying recipes ", recipes);
 
     let recipeItemComponents = [];
 
