@@ -13,6 +13,7 @@ import {
   getRecipes, 
   editRecipe,
   deleteRecipe,
+  searchRecipes,
   addToFavorite,
   getRecommendedRecipes,
 } from '../../actions/recipes-page/recipes-page.actions';
@@ -229,7 +230,7 @@ class RecipesPageContainer extends Component {
     this.props.deleteRecipe(id);
   }
 
-  addToFavorite(recipe, isFavorite) {
+  addToFavorite(recipe, isDisabled, isFavorite) {
     let { user } = this.props;
     let { cookbook } = user;
     let { favorites } = cookbook;
@@ -238,12 +239,9 @@ class RecipesPageContainer extends Component {
       favorites.push(recipe);
     }
     else {
-      console.log(favorites, recipe);
       const index = favorites.findIndex(x=> x.name === recipe.name);
-      console.log(index);
       if (index != -1) {
         favorites.splice(index, 1);
-        console.log("Removed from favorites", favorites);
       }
     }
 
@@ -300,11 +298,129 @@ class RecipesPageContainer extends Component {
         });
         break;
       case 'FAVORITE':
-        this.addToFavorite(recipe, isFavorite);
+        this.addToFavorite(recipe, isDisabled, isFavorite);
         break;
       default:
         break;
     }
+  }
+
+  processResults(recipes) {
+    let i = 0, index = -1;
+    // process recommended recipe
+    const { recommendedRecipe } = this.props;
+    // process search results
+    const { searchResults } = this.props;
+    // process favorites
+    const { user } = this.props;
+    const { cookbook } = user;
+    const { favorites } = cookbook;
+
+    let updatedRecipes = Object.assign([], recipes);
+
+    let updatedRecommendedRecipe = Object.assign({}, recommendedRecipe)
+
+    if (recommendedRecipe) {
+      index = favorites.findIndex(x=> x.name === recommendedRecipe.name)
+      if (index != -1) {
+        updatedRecommendedRecipe = {
+          ...updatedRecommendedRecipe,
+          disabled: false,
+          isFavorite: true,
+          recommended: true,
+        }
+      } else {
+        updatedRecommendedRecipe = {
+          ...updatedRecommendedRecipe,
+          disabled: false,
+          recommended: true,
+        }     
+      }
+    }
+
+    let updatedSearchResults = Object.assign([], searchResults);
+    let firstHalf = [];
+    let secondHalf = [];
+    for (i=0; i < updatedSearchResults.length; i++) {
+      let searchResult = updatedSearchResults[i];
+      index = favorites.findIndex(x=> x.name === searchResult.name);
+      if (index != -1) {
+        searchResult = {
+          ...searchResult,
+          disabled: false,
+          isFavorite: true,
+        }
+        firstHalf.push(searchResult);
+      } else {
+        searchResult = {
+          ...searchResult,
+          disabled: false,
+        }
+        secondHalf.push(searchResult);
+      }
+    }
+    updatedSearchResults = [
+      updatedRecommendedRecipe,
+      ...firstHalf,
+      ...secondHalf,
+    ];
+
+    for (i=0; i < updatedSearchResults.length; i++) {
+      const result = updatedSearchResults[i];
+      index  = updatedRecipes.findIndex(x=> x.name === result.name);
+      if (index != -1) {
+        updatedRecipes.splice(index, 1);
+      }
+    }
+
+    let remainingRecipes = Object.assign([], updatedRecipes);
+    let favoriteRemaining = [];
+    for (i=0; i < remainingRecipes.length; i++) { 
+      let remainingRecipe = remainingRecipes[i];
+      index = favorites.findIndex(x=> x.name === remainingRecipe.name);
+      if (index != -1) {
+        updatedRecipes.splice(index, 1);
+        remainingRecipe = {
+          ...remainingRecipe,
+          isFavorite: true,
+        }
+        favoriteRemaining.push(remainingRecipe);
+      }
+    }
+
+    favoriteRemaining = [
+      ...favoriteRemaining,
+      ...updatedRecipes,
+    ];
+
+    return [
+      ...updatedSearchResults,
+      ...favoriteRemaining,
+    ];
+  }
+
+  registerSearchResults(recipes) {
+    const { searchResults } = this.props;
+
+    let updatedRecipes = Object.assign([], recipes);
+
+    for (var i=0; i < searchResults.length; i++) {
+      let searchResult = searchResults[i];
+      searchResult = {
+        ...searchResult,
+        disabled: false
+      }
+      let index = updatedRecipes.findIndex(x=> x.name === searchResult.name);
+      if (index != -1) {
+        updatedRecipes.splice(index, 1);
+        updatedRecipes = [
+          searchResult,
+          ...updatedRecipes,
+        ];
+      }
+    }
+
+    return updatedRecipes;
   }
 
   registerFavorites(recipes) {
@@ -366,9 +482,7 @@ class RecipesPageContainer extends Component {
    * @param  {Array} recipes List of recipes
    */
   getRecipesGrid(recipes) {
-    recipes = this.registerFavorites(recipes);
-
-    recipes = this.registerRecommendedRecipe(recipes);
+    recipes = this.processResults(recipes);
 
     let recipeItemComponents = [];
 
@@ -416,11 +530,13 @@ class RecipesPageContainer extends Component {
   }
 
   componentDidMount() {
-    const { user } = this.props;
+    const { user, recommendedRecipe } = this.props;
 
     this.props.getRecipes();
-
-    if (user) {
+    
+    if (user) this.props.searchRecipes(user, [""]);
+    
+    if (user && recommendedRecipe === null) {
       this.props.getRecommendedRecipes(user);
     }
   }
@@ -443,9 +559,7 @@ class RecipesPageContainer extends Component {
 
     let recipesGrid = []; 
 
-    if (recipes !== undefined && recipes !== null) recipesGrid = this.getRecipesGrid(recipes);
-
-    // const contentClass = recipesRequestPending ? classes.contentHidden : classes.content;
+    if (recipes !== undefined && recipes !== null && recipes.length > 0) recipesGrid = this.getRecipesGrid(recipes);
 
     return (
         <div className={classes.content}>
@@ -534,6 +648,7 @@ RecipesPageContainer.propTypes = {
 const mapStateToProps = state => ({
   user: state.authReducer.user,
   recipes: state.recipesReducer.recipes,
+  searchResults: state.recipesReducer.searchResults,
   currentRoute: state.navigationReducer.currentRoute,
   recipesRequestFailed: state.recipesReducer.isFailed,
   recipesRequestPending: state.recipesReducer.isPending,
@@ -549,6 +664,7 @@ const mapDispatchToProps = dispatch => ({
   editRecipe: (recipe) => dispatch(editRecipe(recipe)),
   addToFavorite: (user) => dispatch(addToFavorite(user)),
   getRecommendedRecipes: (user) => dispatch(getRecommendedRecipes(user)),
+  searchRecipes: (user, filters) => dispatch(searchRecipes(user, filters)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(RecipesPageContainer));
