@@ -340,14 +340,18 @@ class RecipesPageContainer extends Component {
     }
 
     if (recommendedRecipe) {
-      index = searchResults.findIndex(x=> x.name === recommendedRecipe.name);
-      if (index != -1) {
-        searchResults.splice(index, 1);
+      if (searchResults) {
+        index = searchResults.findIndex(x=> x.name === recommendedRecipe.name);
+        if (index != -1) {
+          searchResults.splice(index, 1);
+        }
       }
 
-      index = updatedRecipes.findIndex(x=> x.name === recommendedRecipe.name);
-      if (index != -1) {
-        updatedRecipes.splice(index, 1);
+      if (updatedRecipes) {
+        index = updatedRecipes.findIndex(x=> x.name === recommendedRecipe.name);
+        if (index != -1) {
+          updatedRecipes.splice(index, 1);
+        }
       }
     }
 
