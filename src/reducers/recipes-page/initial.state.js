@@ -11,6 +11,7 @@
 
 export default {
     recipes: [],
+    searchResults: [],
     isFailed: false,
     isPending: false,
     recommendedRecipe: null,
