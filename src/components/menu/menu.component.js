@@ -37,7 +37,8 @@ class MenuComponent extends React.Component {
       onDrawerOpen,
       onDrawerClosed,
       onSignOutClicked,
-      onMenuItemClicked, 
+      onMenuItemClicked,
+      onSearchInputSubmit,
     } = this.props;
 
     return (
@@ -62,6 +63,12 @@ class MenuComponent extends React.Component {
                   classes={{
                     root: classes.inputRoot,
                     input: classes.inputInput,
+                  }}
+                  onKeyPress={(ev) => {
+                    if (ev.key === 'Enter') {
+                      onSearchInputSubmit(ev.target.value)
+                      ev.preventDefault();
+                    }
                   }}
                 />
               </div>
