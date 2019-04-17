@@ -17,6 +17,10 @@ import { history, menuItemProps } from '../../utils/app.constants';
 import RecipesPageContainer from '../recipes-page/recipes-page.component';
 import IngredientsPageContainer from '../ingredients-page/ingredients-page.component';
 
+import { 
+  searchRecipes, 
+} from '../../actions/recipes-page/recipes-page.actions';
+
 const notificationStyles = {                  
     margin:'5px 0', 
     padding: '2px 5px', 
@@ -46,6 +50,7 @@ class App extends React.Component {
     this.onDrawerClosed = this.onDrawerClosed.bind(this);
     this.onSignOutClicked = this.onSignOutClicked.bind(this);
     this.onMenuItemClicked = this.onMenuItemClicked.bind(this);
+    this.onSearchInputSubmit = this.onSearchInputSubmit.bind(this);
   }
 
   /**
@@ -87,6 +92,15 @@ class App extends React.Component {
     this.props.signOut();
   }
 
+  performSearch(user, value) {
+    this.props.searchRecipes(user, value.split());
+  }
+
+  onSearchInputSubmit(value) {
+    const { user } = this.props;
+    this.performSearch(user, value);
+  }
+
   render() {
     const { 
       classes,
@@ -114,6 +128,7 @@ class App extends React.Component {
             onDrawerClosed={this.onDrawerClosed}
             onSignOutClicked={this.onSignOutClicked}
             onMenuItemClicked={this.onMenuItemClicked}
+            onSearchInputSubmit={this.onSearchInputSubmit}
           />
         }
 
@@ -124,7 +139,6 @@ class App extends React.Component {
           <main className={classNames(classes.content, {[classes.contentShift]: open,})}>
               <Router history={history}>
                   <div>
-                      <Redirect to={menuItemProps.recipesMenu.route} />
                       <Route path={menuItemProps.recipesMenu.route} component={props => <RecipesPageContainer/>}/> 
                       <Route path={menuItemProps.ingredientsMenu.route} component={props => <IngredientsPageContainer/>}/> 
                   </div>
@@ -165,6 +179,7 @@ App.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  user: state.authReducer.user,
   isSignInPending: state.authReducer.isSignInPending,
   isSignInSuccess: state.authReducer.isSignInSuccess,
   isSignInFailed: state.authReducer.isSignInFailed,
@@ -175,6 +190,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   signOut: () => dispatch(signOut()),
   navigateTo: (route) => dispatch(navigateTo(route)),
+  searchRecipes: (user, filters) => dispatch(searchRecipes(user, filters)),
 });
 
 
