@@ -84,6 +84,10 @@ class App extends React.Component {
     history.push(link);
   }
 
+  /**
+   * When user clicks Sign Out
+   * @return {null} 
+   */
   onSignOutClicked() {
     this.setState({ open: false });
 
@@ -92,10 +96,21 @@ class App extends React.Component {
     this.props.signOut();
   }
 
+  /**
+   * When user presses Enter key in the search bar, search request is made
+   * @param  {Object} user  User who performed the request
+   * @param  {String} value Query user put in the search bar
+   * @return {null}       
+   */
   performSearch(user, value) {
     this.props.searchRecipes(user, value.split());
   }
 
+  /**
+   * Handler to submit search query
+   * @param  {Object} value 
+   * @return {[type]}       [description]
+   */
   onSearchInputSubmit(value) {
     const { user } = this.props;
     this.performSearch(user, value);
