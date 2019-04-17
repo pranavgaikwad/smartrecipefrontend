@@ -14,6 +14,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import ListItemText from '@material-ui/core/ListItemText';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -33,6 +34,7 @@ class MenuComponent extends React.Component {
     const { 
       open,
       theme,
+      title,
       classes,
       onDrawerOpen,
       onDrawerClosed,
@@ -50,7 +52,9 @@ class MenuComponent extends React.Component {
             <IconButton color="inherit" aria-label="Open drawer" onClick={onDrawerOpen} className={classNames(classes.menuButton, open && classes.hide)}>
               <MenuIcon/>
             </IconButton>
-
+            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+              { title }
+            </Typography>
             <div className={classes.grow} />
             {
               !open && 
