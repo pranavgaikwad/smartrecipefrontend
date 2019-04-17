@@ -79,9 +79,10 @@ export const actionsRecipes = {
     pending: "REQUEST_PENDING",
     success: "REQUEST_SUCCESS",
     failed: "REQUEST_FAIL",
-    get: "ACTION_GET_INGREDIENTS",
+    get: "ACTION_GET_RECIPES",
     delete: "ACTION_DELETE_RECIPE",
     update: "ACTION_UPDATE_RECIPE",
+    search: "ACTION_SEARCH_RECIPES",
     recommend: "ACTION_GET_RECOMMEND",
 };
 
