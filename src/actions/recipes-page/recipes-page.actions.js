@@ -25,6 +25,14 @@ function get(recipes) {
 }
 
 /**
+ * Populates redux store with list of recipes obtained from backend
+ * @param  {[Object]} recipes List of recipes
+ */
+function add(recipe) {
+  return { type: actionsRecipes.add, recipe };
+}
+
+/**
  * Populates redux store with recommended recipe
  * @param  {[Object]} Recommended recipe
  */
@@ -34,6 +42,10 @@ function recommend(recipe) {
 
 function update(recipe) {
   return { type: actionsRecipes.update, recipe }; 
+}
+
+function search(recipes) {
+  return { type: actionsRecipes.search, searchResults: recipes };
 }
 
 /**
@@ -50,7 +62,7 @@ export function addRecipe(recipe) {
     dispatch(setRequestPending());
     apiProxy.post(`${apiConstants.baseUrl}${apiConstants.addRecipe}`, requestBody, '123')
     .then((response) => {
-      dispatch(get(response));      
+      dispatch(add(response.recipe));      
     })
     .catch((e) => { // eslint-disable-line
       dispatch(setRequestFailed());
@@ -92,7 +104,9 @@ export function getRecipes() {
     apiProxy.get(`${apiConstants.baseUrl}${apiConstants.getRecipes}`, '123')
     .then((response) => {
       const { recipes } = response;
-      dispatch(get(recipes));
+      if (recipes.length > 0) {
+        dispatch(get(recipes));
+      }
     })
     .catch((e) => { // eslint-disable-line
       dispatch(setRequestFailed());
@@ -139,7 +153,6 @@ export function addToFavorite(user, recipe) {
 
     apiProxy.post(`${apiConstants.baseUrl}${apiConstants.favouriteRecipe}`, requestBody, '123')
     .then((response) => {
-      console.log("Added to favorite -->", response);
     })
     .catch((e) => { // eslint-disable-line
       dispatch(setRequestFailed());
@@ -169,13 +182,19 @@ export function deleteRecipe(id) {
 }
 
 
-export function searchRecipes() {
+export function searchRecipes(user, filters) {
+  let requestBody = {
+    user,
+    filters: filters, 
+  };
+
   return (dispatch) => {
     dispatch(setRequestPending());
 
-    apiProxy.get(`${apiConstants.baseUrl}${apiConstants.getRecipes}`, '123')
+    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.searchRecipes}`, requestBody, '123')
     .then((response) => {
-      dispatch(get(response));
+      const { recipes } = response;
+      dispatch(search(recipes));
     })
     .catch((e) => { // eslint-disable-line
       dispatch(setRequestFailed());
