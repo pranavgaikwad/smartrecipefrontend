@@ -428,8 +428,6 @@ class RecipesPageContainer extends Component {
   getRecipesGrid(recipes) {
     recipes = this.processResults(recipes);
 
-    console.log(recipes);
-
     let recipeItemComponents = [];
 
     for (var i = 0; i < recipes.length; i++) {
