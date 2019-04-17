@@ -41,7 +41,6 @@ export default function ingredientsReducer(state = initialState, action = {}) {
       }
 
     case actionsIngredients.pending:
-      console.log('calling pending');
       return {
         ...state,
         isIngredientsPending: true,
