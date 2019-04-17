@@ -2,27 +2,6 @@ import initialState from './initial.state';
 import { actionsRecipes } from '../../utils/app.constants';
 
 /**
- * Updates the recipes list in the state and brings the recommended recipe to the front
- * @param  {[Object]} recipes           Existing recipes
- * @param  {Object} recommendedRecipe   Recommended recipe
- * @return {[Object]}                     Recipes
- */
-function registerRecommendedRecipe(recipes, recommendedRecipe) {
-    let index = null;
-    index = recipes.findIndex(x=> x.name === recommendedRecipe.name);
-    if (index != -1) {
-      recipes.splice(index, 1);
-    }
-    const recipe = {
-      ...recommendedRecipe,
-      recommended: true,
-    };
-    let updatedRecipes = [];
-    if (recipe) updatedRecipes = [recipe, ...recipes];
-    return updatedRecipes;
-}
-
-/**
  * Reducer responsible for handling actions performed on Recipes page
  * @param  {Object} state  Initial State to start 
  * @param  {Object} action Which action to perform
@@ -44,21 +23,15 @@ export default function recipesReducer(state = initialState, action = {}) {
 
  switch (action.type) {
     case actionsRecipes.add:
-      recipes.push(action.recipe);
-      
-      // if (recommendedRecipes.length > 0) {
-      //   updatedRecipes = registerRecommendedRecipe(recipes, recommendedRecipes[0]);
-      // }
-      
       return {
         ...state,
-        recipes,
+        recipes: [
+          ...recipes,
+          action.recipe,
+        ],
       };
 
     case actionsRecipes.get:
-      // if (recommendedRecipes.length > 0) {
-      //   updatedRecipes = registerRecommendedRecipe(newRecipes, recommendedRecipes[0]);
-      // }
       return {
         ...state,
         recipes: action.recipes,
@@ -94,6 +67,15 @@ export default function recipesReducer(state = initialState, action = {}) {
       return {
         ...state,
         isPending: true,
+        isFailed: false,
+      };
+
+    case actionsRecipes.search:
+      const { searchResults } = action;
+      return {
+        ...state,
+        searchResults,
+        isPending: false,
         isFailed: false,
       };
 
