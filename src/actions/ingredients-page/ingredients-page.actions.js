@@ -38,12 +38,10 @@ export function updateUser(user) {
     dispatch(setRequestPending());
     apiProxy.post(`${apiConstants.baseUrl}${apiConstants.updateUser}`, requestBody, '123')
     .then((response) => {
-      console.log(response);
       dispatch(update(response.user));
     })
     .catch((e) => { // eslint-disable-line
       dispatch(setRequestFailed());
-      console.log('Error updating ingredient', e);
     })
   };
 }
