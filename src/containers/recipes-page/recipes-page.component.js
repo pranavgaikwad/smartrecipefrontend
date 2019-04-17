@@ -48,6 +48,7 @@ class RecipesPageContainer extends Component {
       showEditDialog: false,
       ingredientToAdd: newIngredient,
       showAddIngredientDialog: false,
+      allFlavorTags: [],
     };
 
     this.onDialogSubmit = this.onDialogSubmit.bind(this);
@@ -110,8 +111,15 @@ class RecipesPageContainer extends Component {
       }
   }
 
-  onFormFlavorTagDeleted() {
-
+  onFormFlavorTagDeleted(name) {
+    let recipe = Object.assign({}, this.state.recipe);
+    let { flavorTags } = recipe;
+    let index = flavorTags.findIndex(x=> x === name);
+    flavorTags.splice(index, 1);
+    recipe.flavorTags = flavorTags;
+    this.setState({
+      recipe,
+    });
   }
 
   onFormFlavorTagAdded(value) {
@@ -119,7 +127,6 @@ class RecipesPageContainer extends Component {
     let { flavorTags } = recipe;
     flavorTags.push(value);
     recipe.flavorTags = flavorTags;
-    console.log(recipe);
     this.setState({
       recipe,
     });
@@ -506,6 +513,10 @@ class RecipesPageContainer extends Component {
     }
   }
 
+  registerAllFlavorTags() {
+
+  }
+
   render() {
     const { 
       recipe, 
@@ -547,7 +558,9 @@ class RecipesPageContainer extends Component {
               onFormChange={this.onDialogFormChange}
               onFlavorTagAdded={this.onFormFlavorTagAdded}
               onIngredientAdded={this.onFormIngredientAdded}
-              onIngredientDeleted={this.onFormIngredientDeleted}/>
+              onFlavorTagDeleted={this.onFormFlavorTagDeleted}
+              onIngredientDeleted={this.onFormIngredientDeleted}
+            />
           }
           {
             <AddIngredientDialog

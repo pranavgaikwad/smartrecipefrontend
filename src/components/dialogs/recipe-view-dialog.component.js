@@ -10,6 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import IngredientListComponent from '../lists/ingredients-list.component';
 import NutritionalValueListComponent from '../lists/nutritional-value-list.component';
+import FlavorTagsChipsComponent from '../chips/flavor-tags-chips.component';
 
 /**
  * Dialog which shows recipe in a detailed view
@@ -28,17 +29,13 @@ class RecipeViewCard extends Component {
       disabled,
       ingredients,
       nutVal,
+      flavorTags,
       instructions: description,
     } = recipe;
 
-    const {
-      calories, totalFat,
-      saturatedFat, transFat,
-      carbs, fiber, sugar,
-      protein, cholesterol, sodium,
-    } = nutVal;
-
     const showIngredientList = (ingredients.length === 0) ? false : true;
+
+    const showFlavorTags = (flavorTags.length === 0) ? false : true;
 
     return (
       <Dialog open={open} aria-labelledby="form-dialog-title">
@@ -55,6 +52,16 @@ class RecipeViewCard extends Component {
           {
             showIngredientList &&
             <IngredientListComponent ingredients={ingredients}/>
+          }
+          {
+            showFlavorTags &&
+            <Typography component="h6" variant="h6" className={classes.typography}>
+              Flavor Tags
+            </Typography>
+          }
+          {
+            showFlavorTags &&
+            <FlavorTagsChipsComponent flavorTags={flavorTags}/>
           }
           <Typography component="h6" variant="h6" className={classes.typography}>
             Instructions
