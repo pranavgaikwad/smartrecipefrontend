@@ -321,7 +321,7 @@ class RecipesPageContainer extends Component {
 
     let updatedRecommendedRecipe = Object.assign({}, recommendedRecipe)
 
-    if (recommendedRecipe) {
+    if (recommendedRecipe !== undefined && recommendedRecipe !== null) {
       index = favorites.findIndex(x=> x.name === recommendedRecipe.name)
       if (index != -1) {
         updatedRecommendedRecipe = {
@@ -373,7 +373,7 @@ class RecipesPageContainer extends Component {
       }
     }
 
-    if (updatedRecommendedRecipe.length > 0) {
+    if (Object.keys(updatedRecommendedRecipe).length > 0) {
       updatedSearchResults = [
         updatedRecommendedRecipe,
         ...firstHalf,
@@ -420,83 +420,6 @@ class RecipesPageContainer extends Component {
     ];
   }
 
-  registerSearchResults(recipes) {
-    const { searchResults } = this.props;
-
-    let updatedRecipes = Object.assign([], recipes);
-
-    for (var i=0; i < searchResults.length; i++) {
-      let searchResult = searchResults[i];
-      searchResult = {
-        ...searchResult,
-        disabled: false
-      }
-      let index = updatedRecipes.findIndex(x=> x.name === searchResult.name);
-      if (index != -1) {
-        updatedRecipes.splice(index, 1);
-        updatedRecipes = [
-          searchResult,
-          ...updatedRecipes,
-        ];
-      }
-    }
-
-    return updatedRecipes;
-  }
-
-  registerFavorites(recipes) {
-    const { user } = this.props;
-    const { cookbook } = user;
-    const { favorites } = cookbook;
-    let updatedRecipes = Object.assign([], recipes);
-
-    let i = 0;
-    for (i=0; i < favorites.length; i++) {
-      let favoriteRecipe = favorites[i];
-      favoriteRecipe = {
-        ...favoriteRecipe,
-        isFavorite: true,
-      };
-      let index = updatedRecipes.findIndex(x=> x.name === favoriteRecipe.name);
-      if (index != -1) {
-        updatedRecipes.splice(index, 1);
-        updatedRecipes = [
-          favoriteRecipe,
-          ...updatedRecipes,
-        ];   
-      }
-    }
-    return updatedRecipes;
-  }
-
-  registerRecommendedRecipe(recipes) {
-    let { recommendedRecipe } = this.props;
-
-    let index = -1; 
-    
-    if (recommendedRecipe) index = recipes.findIndex(x=> x.name === recommendedRecipe.name);
-
-    if (index != -1) recommendedRecipe = recipes[index];
-
-    recommendedRecipe = {
-      ...recommendedRecipe,
-      recommended: true,
-      disabled: false,
-    };
-
-    let updatedRecipes = Object.assign([], recipes); 
-
-    index = updatedRecipes.findIndex(x=> x.name === recommendedRecipe.name);
-    if (index != -1) {
-      updatedRecipes.splice(index, 1);
-      updatedRecipes = [
-        recommendedRecipe, 
-        ...updatedRecipes,
-      ];
-    }
-    return updatedRecipes;
-  }
-
   /**
    * Generates a grid of specified size out of 
    * all recipe components available in the store.
@@ -504,6 +427,8 @@ class RecipesPageContainer extends Component {
    */
   getRecipesGrid(recipes) {
     recipes = this.processResults(recipes);
+
+    console.log(recipes);
 
     let recipeItemComponents = [];
 
