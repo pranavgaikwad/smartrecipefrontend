@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import AddIcon from '@material-ui/icons/Add';
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 import { 
   addRecipe, 
@@ -504,8 +505,6 @@ class RecipesPageContainer extends Component {
   getRecipesGrid(recipes) {
     recipes = this.processResults(recipes);
 
-    console.log("Displaying recipes ", recipes);
-
     let recipeItemComponents = [];
 
     for (var i = 0; i < recipes.length; i++) {
@@ -585,8 +584,11 @@ class RecipesPageContainer extends Component {
 
     return (
         <div className={classes.content}>
-          <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.onAddButtonClicked}>
+          <Fab color="secondary" aria-label="Add" className={classes.fabAdd} onClick={this.onAddButtonClicked}>
             <AddIcon />
+          </Fab>
+          <Fab color="secondary" aria-label="Filter" className={classes.fabFilter} onClick={this.onAddButtonClicked}>
+            <FilterListIcon />
           </Fab>
           {
             recipesRequestPending &&
@@ -648,8 +650,17 @@ const styles = theme => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
-  fab: {
+  fabAdd: {
     margin: 24,
+    position: 'fixed',
+    bottom: 0,
+    right: 0,
+  },
+  fabFilter: {
+    marginBottom: 24,
+    marginTop: 24,
+    marginLeft: 24,
+    marginRight: 96,
     position: 'fixed',
     bottom: 0,
     right: 0,
