@@ -166,6 +166,13 @@ class RecipesPageContainer extends Component {
       return false;
     }
 
+    const isAlphaNumeric = !/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(name);
+
+    if (!isAlphaNumeric) {
+      this.props.notify(errorNotification("Recipe name must not contain special characters"));
+      return false;
+    }
+
     if (desc === "") {
       this.props.notify(errorNotification("Recipe must have a short description"));
       return false;
