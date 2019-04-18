@@ -16,6 +16,7 @@ export const apiConstants = {
     getRecipes: 'cookbook?action=get_recipes',
     searchRecipes: 'cookbook?action=search_recipes',
     favouriteRecipe: 'cookbook?action=add_favorites',
+    getShowcaseRecipe: 'cookbook?action=get_showcase',
     getRecommendedRecipes: 'cookbook?action=recommend_recipe',
 };  
 
@@ -26,6 +27,12 @@ export const ormConstants = {
 
 // properties of items in the navigation menu
 export const menuItemProps = {
+    loginMenu: {
+        id: 0,
+        key: "login",
+        title: "Login",
+        route: "/",
+    },
     recipesMenu : {
         id: 1,
         key: "recipes",
@@ -38,11 +45,11 @@ export const menuItemProps = {
         title: "Ingredients",
         route: "/ingredients",
     },
-    recommendationsMenu: {
+    showcase: {
         id: 3,
-        key: "recommendations", 
+        key: "showcase", 
         title: "Recommendations",
-        route: "/recommendations",
+        route: "/showcase/:name",
     },
 }
 
@@ -84,6 +91,13 @@ export const actionsRecipes = {
     update: "ACTION_UPDATE_RECIPE",
     search: "ACTION_SEARCH_RECIPES",
     recommend: "ACTION_GET_RECOMMEND",
+};
+
+// constants related to showcase actions
+export const actionsShowcase = {
+    get: "ACTION_GET_RECIPES",
+    pending: "REQUEST_PENDING",
+    failed: "REQUEST_FAILED",
 };
 
 // constants related to navigation reducer
