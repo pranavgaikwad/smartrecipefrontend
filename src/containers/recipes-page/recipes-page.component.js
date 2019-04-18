@@ -47,13 +47,13 @@ class RecipesPageContainer extends Component {
     this.state = {
       editMode: false,
       recipe: newRecipe,
-      showShareDialog: false,
+      allFlavorTags: [],
       showViewDialog: false,
       showEditDialog: false,
+      showShareDialog: false,
       showFlavorFilterDialog: false,
       ingredientToAdd: newIngredient,
       showAddIngredientDialog: false,
-      allFlavorTags: [],
     };
 
     this.onDialogSubmit = this.onDialogSubmit.bind(this);
