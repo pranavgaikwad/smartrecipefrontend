@@ -5,6 +5,7 @@ import authReducer from '../reducers/auth/auth.reducer';
 import navigationReducer from '../reducers/navigation/navigation.reducer';
 import recipesReducer from '../reducers/recipes-page/recipes-page.reducer';
 import ingredientsReducer from '../reducers/ingredients-page/ingredients-page.reducer';
+import showCaseReducer from '../reducers/showcase/showcase.reducer';
 
 /**
  * Combines all reducers into one big reducer
@@ -13,6 +14,7 @@ import ingredientsReducer from '../reducers/ingredients-page/ingredients-page.re
 const rootReducer = combineReducers({
   authReducer,
   recipesReducer,
+  showCaseReducer,
   navigationReducer,
   ingredientsReducer,
   notifications: notifyReducer,
