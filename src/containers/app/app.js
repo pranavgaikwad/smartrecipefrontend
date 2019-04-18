@@ -15,6 +15,7 @@ import MenuComponent from '../../components/menu/menu.component';
 import HomePageComponent from '../home-page/home-page.component';
 import { history, menuItemProps } from '../../utils/app.constants';
 import RecipesPageContainer from '../recipes-page/recipes-page.component';
+import ShowcaseContainer from '../showcase/showcase-container.component';
 import IngredientsPageContainer from '../ingredients-page/ingredients-page.component';
 
 import { 
@@ -131,7 +132,17 @@ class App extends React.Component {
       <div className={classes.root}>
         <Notify customStyles={notificationStyles} position="TopRight"/>
         {/* login page */}
-        { !isSignInSuccess && <HomePageComponent/> }
+        { 
+          !isSignInSuccess &&
+          <main className={classNames(classes.content, {[classes.contentShift]: open,})}>
+              <Router history={history}>
+                  <div>
+                      <Route path={menuItemProps.loginMenu.route} exact component={props => <HomePageComponent/>}/>
+                      <Route path={menuItemProps.showcase.route} component={props => <ShowcaseContainer {...props}/>}/> 
+                  </div>
+              </Router>
+          </main> 
+        }
 
         {/* navigation menu */}
         { 
