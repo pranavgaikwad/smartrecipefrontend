@@ -4,6 +4,7 @@ export const history = createHistory();
 
 export const appConstants = {
     appTitle: "Smart Recipe Recommender",
+    appUrl: process.env.REACT_APP_FRONTEND_URL,
 };
 
 export const apiConstants = {
