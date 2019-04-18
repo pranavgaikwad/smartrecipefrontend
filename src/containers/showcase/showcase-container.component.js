@@ -20,7 +20,7 @@ class ShowcaseContainer extends Component {
   render() { 
     const { classes, showCasePending, showCaseRecipe } = this.props;
 
-    let recipe = { name: "", desc: "", instructions: "", ingredients: [], nutVal: {}}
+    let recipe = { name: "", desc: "", instructions: "", ingredients: [], nutVal: {}, flavorTags: [] };
 
     if (showCaseRecipe) recipe = showCaseRecipe
 
