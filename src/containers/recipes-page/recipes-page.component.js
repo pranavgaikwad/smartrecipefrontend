@@ -544,8 +544,6 @@ class RecipesPageContainer extends Component {
       }
     }
 
-    console.log("Updated recipes ==> ", newResults);
-
     return newResults;
   }
 
