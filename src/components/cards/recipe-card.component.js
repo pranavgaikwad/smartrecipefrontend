@@ -86,9 +86,13 @@ class RecipeCardComponent extends React.Component {
 
     const favoriteIconColor = isFavorite ? red[700] : null;
 
-    const historyIconColor = isHistory ? red[700] : null;
+    const historyIconColor = isHistory ? lightBlue[900] : null;
 
     const titleClass = disabled ? classes.title : null;
+
+    const historyTooltip = isHistory ? "Remove from history" : "Add to history";
+
+    const favoriteTooltip = isHistory ? "Remove from favorites" : "Add to favorites";
 
     return (
       <Card className={cardClass}>
@@ -118,12 +122,12 @@ class RecipeCardComponent extends React.Component {
               <VisibilityIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Add to favorites" aria-label="Favourite">
+          <Tooltip title={favoriteTooltip} aria-label="Favourite">
             <IconButton style={{ color: favoriteIconColor }} aria-label="Add to favorites" onClick={() => onCardActionClicked(title, 'FAVORITE', disabled, isFavorite)}>
               <FavoriteIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Add to history" aria-label="History">
+          <Tooltip title={historyTooltip} aria-label="History">
             <IconButton style={{ color: historyIconColor }} aria-label="History" onClick={() => onCardActionClicked(title, 'HISTORY', disabled, isFavorite, isHistory)}>
               <HistoryIcon />
             </IconButton>
@@ -153,22 +157,28 @@ class RecipeCardComponent extends React.Component {
 }
 
 const styles = theme => ({
-  "@keyframes blink": { 
-   "10%": { border: '1px solid #e3f2fd', },
-   "20%": { border: '1px solid #bbdefb', },
-   "30%": { border: '1px solid #90caf9', },
-   "40%": { border: '1px solid #64b5f6', },
-   "50%": { border: '1px solid #2196f3', },
-   "60%": { border: '1px solid #2196f3', },
-   "70%": { border: '1px solid #64b5f6', }, 
-   "80%": { border: '1px solid #90caf9', }, 
-   "90%": { border: '1px solid #bbdefb', }, 
-   "100%": { border: '1px solid #e3f2fd', }, 
+  "@keyframes blink": {
+    "5%": { border: '1px solid #f3e5f5', },
+   "10%": { border: '1px solid #e1bee7', },
+   "20%": { border: '1px solid #ce93d8', },
+   "25%": { border: '1px solid #ba68c8', },
+   "30%": { border: '1px solid #ab47bc', },
+   "40%": { border: '1px solid #9c27b0', },
+   "45%": { border: '1px solid #8e24aa', },
+   "50%": { border: '1px solid #7b1fa2', },
+   "55%": { border: '1px solid #7b1fa2', },   
+   "60%": { border: '1px solid #8e24aa', },
+   "70%": { border: '1px solid #9c27b0', }, 
+   "75%": { border: '1px solid #ab47bc', }, 
+   "80%": { border: '1px solid #ba68c8', }, 
+   "90%": { border: '1px solid #ce93d8', },
+   "95%": { border: '1px solid #e1bee7', }, 
+   "100%": { border: '1px solid #f3e5f5', }, 
   },
   card: {
     margin: 5,
     width: '100%',
-    border: '1px solid #e3f2fd',
+    border: '1px solid #f3e5f5',
     maxWidth: '100%',
     minHeight: '100%',
     animationName: 'blink',
