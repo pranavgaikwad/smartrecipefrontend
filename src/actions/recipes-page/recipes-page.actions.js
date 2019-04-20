@@ -185,6 +185,8 @@ export function deleteRecipe(id) {
 export function searchRecipes(user, filters, isIngredientFilter) {
   let requestBody = {};
 
+  let url = `${apiConstants.baseUrl}${apiConstants.searchRecipes}&one_more=true`;
+
   if (isIngredientFilter) {
     requestBody = {
       user,
@@ -200,7 +202,7 @@ export function searchRecipes(user, filters, isIngredientFilter) {
   return (dispatch) => {
     dispatch(setRequestPending());
 
-    apiProxy.post(`${apiConstants.baseUrl}${apiConstants.searchRecipes}`, requestBody, '123')
+    apiProxy.post(url, requestBody, '123')
     .then((response) => {
       const { recipes } = response;
       dispatch(search(recipes));
