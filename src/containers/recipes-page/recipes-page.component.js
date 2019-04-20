@@ -365,7 +365,7 @@ class RecipesPageContainer extends Component {
   }
 
 
-  onCardActionClicked(recipeName, action, isDisabled, isFavorite, isHistory) {
+  onCardActionClicked(recipeName, action, isDisabled, isFavorite, isHistory, needsOneMore) {
     const index = this.props.recipes.findIndex(x => x.name === recipeName);
 
     if (index == -1) return;
@@ -376,6 +376,7 @@ class RecipesPageContainer extends Component {
       ...recipe, 
       disabled: isDisabled,
       isFavorite: isFavorite,
+      needsOneMoreIngredient: needsOneMore,
     }
 
     switch(action) {

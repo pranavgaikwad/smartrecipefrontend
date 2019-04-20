@@ -114,7 +114,7 @@ class RecipeCardComponent extends React.Component {
         {/* Card Footer */}
         <CardActions className={classes.actions} disableActionSpacing>
           <Tooltip title="View" aria-label="View">
-            <IconButton aria-label="View" onClick={() => onCardActionClicked(title, 'VIEW', disabled)}>
+            <IconButton aria-label="View" onClick={() => onCardActionClicked(title, 'VIEW', disabled, isFavorite, isHistory, needsOneMore)}>
               <VisibilityIcon />
             </IconButton>
           </Tooltip>
