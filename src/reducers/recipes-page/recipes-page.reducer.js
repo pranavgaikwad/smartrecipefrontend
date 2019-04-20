@@ -87,6 +87,16 @@ export default function recipesReducer(state = initialState, action = {}) {
         isPending: false,
       };
 
+    case actionsRecipes.reset:
+      return {
+        ...state,
+        searchResults: [],
+        recipes: [],
+        recommendedRecipe: null,
+        isFailed: false,
+        isPending: false,
+      }
+
     default:
       return state;
   }
