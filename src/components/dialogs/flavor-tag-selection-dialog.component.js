@@ -23,7 +23,7 @@ class FlavorTagSelectionDialog extends Component {
 
   onFlavorTagChecked(tag) {
     const index = this.state.checked.findIndex(x => x === tag);
-    if (index == -1) {
+    if (index == -1) {  // eslint-disable-line
       this.setState({
         checked: [
           ...this.state.checked,

@@ -1,6 +1,6 @@
 import initialState from './initial.state';
 import { actionsRecipes } from '../../utils/app.constants';
-
+/* eslint-disable */
 /**
  * Reducer responsible for handling actions performed on Recipes page
  * @param  {Object} state  Initial State to start 

@@ -1,5 +1,3 @@
-import { createNotification } from 'react-redux-notify';
-
 import { apiProxy } from '../../utils/api-proxy.service';
 import { apiConstants, actionsShowcase } from '../../utils/app.constants';
 
