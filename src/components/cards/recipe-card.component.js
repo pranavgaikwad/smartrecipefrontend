@@ -86,14 +86,17 @@ class RecipeCardComponent extends React.Component {
       avatar = title[0];
     }
 
+    let needsOneMore = false;
+    if (recipe.needsOneMoreIngredient) needsOneMore = recipe.needsOneMoreIngredient;
+
+    const cardClass = needsOneMore ? classes.card : classes.cardNormal;
+
     const favoriteIconColor = isFavorite ? red[700] : null;
 
-    // const showIngredientChips = (ingredients.length === 0) ? false : true;
-    
     const titleClass = disabled ? classes.title : null;
     
     return (
-      <Card className={classes.card}>
+      <Card className={cardClass}>
         {/* Card Top Header */}
         <CardHeader
           classes={{title: titleClass, subheader: titleClass}}
@@ -150,9 +153,32 @@ class RecipeCardComponent extends React.Component {
 }
 
 const styles = theme => ({
+  "@keyframes blink": { 
+   "10%": { border: '1px solid #e3f2fd', },
+   "20%": { border: '1px solid #bbdefb', },
+   "30%": { border: '1px solid #90caf9', },
+   "40%": { border: '1px solid #64b5f6', },
+   "50%": { border: '1px solid #2196f3', },
+   "60%": { border: '1px solid #2196f3', },
+   "70%": { border: '1px solid #64b5f6', }, 
+   "80%": { border: '1px solid #90caf9', }, 
+   "90%": { border: '1px solid #bbdefb', }, 
+   "100%": { border: '1px solid #e3f2fd', }, 
+  },
   card: {
     margin: 5,
     width: '100%',
+    border: '1px solid #e3f2fd',
+    maxWidth: '100%',
+    minHeight: '100%',
+    animationName: 'blink',
+    animationDuration: '5s',
+    animationIterationCount: 'infinite',
+  },
+  cardNormal: {
+    margin: 5,
+    width: '100%',
+    border: '1px solid #e3f2fd',
     maxWidth: '100%',
     minHeight: '100%',
   },
