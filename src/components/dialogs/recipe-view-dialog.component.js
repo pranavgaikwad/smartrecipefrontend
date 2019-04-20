@@ -33,6 +33,10 @@ class RecipeViewCard extends Component {
       instructions: description,
     } = recipe;
 
+    let needsOneMore = false;
+
+    if (recipe.needsOneMoreIngredient) needsOneMore = recipe.needsOneMoreIngredient;
+
     const showIngredientList = (ingredients.length === 0) ? false : true;
 
     const showFlavorTags = (flavorTags.length === 0) ? false : true;
@@ -42,8 +46,12 @@ class RecipeViewCard extends Component {
         <DialogTitle id="form-dialog-title">{title}</DialogTitle>
         <DialogContent>
           {
+            needsOneMore &&
+            <Typography className={classes.warning} component="p">You need one more ingredient to make this recipe!</Typography>
+          }
+          {
             disabled &&
-            <Typography className={classes.warning} component="p">You cannot make this reipe with your ingredients!</Typography>
+            <Typography className={classes.warning} component="p">You cannot make this recipe with your ingredients!</Typography>
           }
           {
             showIngredientList &&
@@ -97,6 +105,7 @@ const styles = theme => ({
     marginTop : 5,
     marginBottom: 5,
     color: "#f00",
+    fontStyle: 'italic',
   }
 });
 
