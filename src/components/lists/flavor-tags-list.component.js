@@ -42,7 +42,7 @@ class FlavorTagListComponent extends React.Component {
           <Grid 
             key={"ing_row"} 
             container 
-            spacing={4}>
+            spacing={8}>
                {
                   flavorTags.map((data, id) => {
                     return (
