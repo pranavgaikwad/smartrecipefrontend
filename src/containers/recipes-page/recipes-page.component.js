@@ -33,7 +33,7 @@ import RecipeShareComponent from '../../components/dialogs/social-share-dialog.c
 import AddIngredientDialog from '../../components/dialogs/add-ingredient-dialog.component';
 import FlavorTagSelectionDialog from '../../components/dialogs/flavor-tag-selection-dialog.component';
 
-const newRecipe = { name: '', desc: '', instructions: '', ingredients: [], nutVal: {}, flavorTags: [] };
+const newRecipe = { name: '', desc: '', instructions: '', needsOneMoreIngredient: false, ingredients: [], nutVal: {}, flavorTags: [] };
 
 const newIngredient = { name: "", quantity: "", unit: "" };
 
@@ -338,7 +338,34 @@ class RecipesPageContainer extends Component {
     this.props.updateUser(user);
   }
 
-  onCardActionClicked(recipeName, action, isDisabled, isFavorite) {
+  addToHistory(recipe, isHistory) {
+    let { user } = this.props;
+    let { cookbook } = user;
+    let { history } = cookbook;
+
+    if (!isHistory){
+      history.push(recipe);
+    }
+    else {
+      const index = history.findIndex(x=> x.name === recipe.name);
+      if (index != -1) {
+        history.splice(index, 1);
+      }
+    }
+
+    user = {
+      ...user,
+      cookbook: {
+        ...cookbook,
+        history,
+      }
+    };
+
+    this.props.updateUser(user);
+  }
+
+
+  onCardActionClicked(recipeName, action, isDisabled, isFavorite, isHistory) {
     const index = this.props.recipes.findIndex(x => x.name === recipeName);
 
     if (index == -1) return;
@@ -382,6 +409,9 @@ class RecipesPageContainer extends Component {
       case 'FAVORITE':
         this.addToFavorite(recipe, isDisabled, isFavorite);
         break;
+      case 'HISTORY':
+        this.addToHistory(recipe, isHistory);
+        break;
       default:
         break;
     }
@@ -396,7 +426,7 @@ class RecipesPageContainer extends Component {
     // process favorites
     const { user } = this.props;
     const { cookbook } = user;
-    const { favorites } = cookbook;
+    const { favorites, history } = cookbook;
 
     let updatedRecipes = Object.assign([], recipes);
 
@@ -495,11 +525,28 @@ class RecipesPageContainer extends Component {
       }
     }
 
-    return [
+    const results = [
       ...updatedSearchResults,
       ...favoriteRemaining,
       ...updatedRecipes,
     ];
+
+
+    const newResults = Object.assign([], results);
+    for (i=0; i < results.length; i++) {
+      const index = history.findIndex(x=> x.name === results[i].name);
+      if (index != -1) {
+        const historyRecipe = {
+          ...results[i],
+          isHistory: true,
+        };
+        newResults[i] = historyRecipe;
+      }
+    }
+
+    console.log("Updated recipes ==> ", newResults);
+
+    return newResults;
   }
 
   /**
@@ -516,10 +563,13 @@ class RecipesPageContainer extends Component {
       const currentRecipe = recipes[i];
 
       let disabled = true;
+      let isHistory = false;
       let isFavorite = false;
       let isRecommended = false;
 
       if (currentRecipe.recommended) isRecommended = true;
+
+      if (currentRecipe.isHistory) isHistory = true;
 
       if (currentRecipe.isFavorite) isFavorite = true;
 
@@ -538,6 +588,7 @@ class RecipesPageContainer extends Component {
               id={i}
               key={i}
               disabled={disabled}
+              isHistory={isHistory}
               recipe={currentRecipe}
               isFavorite={isFavorite}
               recommended={isRecommended}
