@@ -21,9 +21,9 @@ import {
 } from '@material-ui/core/colors';
 
 import EditIcon from '@material-ui/icons/Edit';
-import ShareIcon from '@material-ui/icons/Share';
-import DeleteIcon from '@material-ui/icons/Delete';
 import StarIcon from '@material-ui/icons/Star';
+import ShareIcon from '@material-ui/icons/Share';
+import HistoryIcon from '@material-ui/icons/History';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
@@ -32,12 +32,6 @@ const avatarColors = [
   red[500], blue[500], pink[500], cyan[500], lightBlue[900],
   teal[500], lime[900], green[500], orange[500], purple[500],
   brown[500], deepPurple[500], yellow[900], lightGreen[900], amber[500]
-];
-
-const iconColors = [
-  red[900], blue[900], pink[900], cyan[900], lightBlue[900],
-  teal[900], lime[900], green[900], orange[900], purple[900],
-  brown[900], deepPurple[900], yellow[900], lightGreen[900], amber[900]
 ];
 
 const disabledAvatarColor = [grey[500]];
@@ -65,14 +59,13 @@ class RecipeCardComponent extends React.Component {
 
   render() {
     const { 
-      id,
       recipe,
       classes, 
       disabled,
+      isHistory,
       isFavorite,
       recommended,
       onCardActionClicked,
-      onDeleteButtonClicked,
     } = this.props;
 
     const {
@@ -93,8 +86,10 @@ class RecipeCardComponent extends React.Component {
 
     const favoriteIconColor = isFavorite ? red[700] : null;
 
+    const historyIconColor = isHistory ? red[700] : null;
+
     const titleClass = disabled ? classes.title : null;
-    
+
     return (
       <Card className={cardClass}>
         {/* Card Top Header */}
@@ -123,9 +118,14 @@ class RecipeCardComponent extends React.Component {
               <VisibilityIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Favourite" aria-label="Favourite">
+          <Tooltip title="Add to favorites" aria-label="Favourite">
             <IconButton style={{ color: favoriteIconColor }} aria-label="Add to favorites" onClick={() => onCardActionClicked(title, 'FAVORITE', disabled, isFavorite)}>
               <FavoriteIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Add to history" aria-label="History">
+            <IconButton style={{ color: historyIconColor }} aria-label="History" onClick={() => onCardActionClicked(title, 'HISTORY', disabled, isFavorite, isHistory)}>
+              <HistoryIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Edit" aria-label="Edit">
