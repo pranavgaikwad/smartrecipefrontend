@@ -15,7 +15,7 @@ export const apiConstants = {
     addRecipe: 'cookbook?action=add_recipe',
     editRecipe: 'cookbook?action=edit_recipe',
     getRecipes: 'cookbook?action=get_recipes',
-    searchRecipes: 'cookbook?action=search_recipes&one_more=true',
+    searchRecipes: 'cookbook?action=search_recipes',
     favouriteRecipe: 'cookbook?action=add_favorites',
     getShowcaseRecipe: 'cookbook?action=get_showcase',
     getRecommendedRecipes: 'cookbook?action=recommend_recipe',
