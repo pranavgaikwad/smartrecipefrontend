@@ -6,11 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Checkbox from '@material-ui/core/Checkbox';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
 
 class FlavorTagListItem extends React.Component {
   render() {
@@ -38,7 +35,7 @@ class FlavorTagListItem extends React.Component {
 class FlavorTagListComponent extends React.Component {
 
   render() {
-    const { classes, flavorTags, checked, onFlavorTagChecked } = this.props;
+    const { classes, flavorTags, onFlavorTagChecked } = this.props;
 
     return ( 
       <List dense={true}>
