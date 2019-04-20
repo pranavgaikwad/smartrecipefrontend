@@ -9,6 +9,7 @@ import { createNotification } from 'react-redux-notify';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import AddIcon from '@material-ui/icons/Add';
+import StyleIcon from '@material-ui/icons/Style';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
 import { 
@@ -33,10 +34,15 @@ import RecipeViewComponent from '../../components/dialogs/recipe-view-dialog.com
 import RecipeShareComponent from '../../components/dialogs/social-share-dialog.component';
 import AddIngredientDialog from '../../components/dialogs/add-ingredient-dialog.component';
 import FlavorTagSelectionDialog from '../../components/dialogs/flavor-tag-selection-dialog.component';
+import IngredientFilterSelectionDialog from '../../components/dialogs/ingredient-filter-selection-dialog.component';
 
 const newRecipe = { name: '', desc: '', instructions: '', needsOneMoreIngredient: false, ingredients: [], nutVal: {}, flavorTags: [] };
 
 const newIngredient = { name: "", quantity: "", unit: "" };
+
+const actions = [
+  { icon: <FilterListIcon style={{ color: '#f48fb1' }}/>, name: 'Flavor Filter' },
+];
 
 /**
  * Main Container for recipes page. 
@@ -53,8 +59,13 @@ class RecipesPageContainer extends Component {
       showEditDialog: false,
       showShareDialog: false,
       showFlavorFilterDialog: false,
+      showIngredientFilterDialog: false,
       ingredientToAdd: newIngredient,
       showAddIngredientDialog: false,
+      filterMenuState: {
+        open: false,
+        hidden: false,
+      },
     };
 
     this.onDialogSubmit = this.onDialogSubmit.bind(this);
@@ -71,6 +82,8 @@ class RecipesPageContainer extends Component {
     this.onRecipeDeleteButtonClicked = this.onRecipeDeleteButtonClicked.bind(this);
     this.onAddIngredientDialogClosed = this.onAddIngredientDialogClosed.bind(this);
     this.onAddIngredientDialogSubmit = this.onAddIngredientDialogSubmit.bind(this);
+    this.onIngredientFilterButtonClicked = this.onIngredientFilterButtonClicked.bind(this);
+    this.onIngredientFilterRequestSubmit = this.onIngredientFilterRequestSubmit.bind(this);
   }
 
   /**
@@ -90,6 +103,7 @@ class RecipesPageContainer extends Component {
       showShareDialog: false,
       showEditDialog: false,
       showFlavorFilterDialog: false,
+      showIngredientFilterDialog: false,
     });
   }
 
@@ -108,8 +122,20 @@ class RecipesPageContainer extends Component {
     if (user) this.props.searchRecipes(user, tags);
   }
 
+  onIngredientFilterRequestSubmit(tag) {
+    const { user } = this.props;
+
+    this.onCardViewClosed();
+
+    if (user) this.props.searchRecipes(user, tag, true);
+  }
+
   onFilterButtonClicked() {
     this.setState({ showFlavorFilterDialog: true });
+  }
+
+  onIngredientFilterButtonClicked() {
+    this.setState({ showIngredientFilterDialog: true });
   }
 
   onAddIngredientDialogSubmit() {
@@ -641,15 +667,27 @@ class RecipesPageContainer extends Component {
       showViewDialog, 
       showShareDialog,
       ingredientToAdd,
+      filterMenuState,
       showFlavorFilterDialog,
       showAddIngredientDialog,
+      showIngredientFilterDialog,
     } = this.state;
 
+    const {
+      open,
+      hidden
+    } = filterMenuState;
+
     const { 
+      user,
       classes, 
       recipes,
       recipesRequestPending,
     } = this.props;
+
+    let allIngredients = [];
+
+    if (user.fridge.ingredients) allIngredients = user.fridge.ingredients;
 
     let recipesGrid = []; 
 
@@ -660,7 +698,10 @@ class RecipesPageContainer extends Component {
           <Fab color="secondary" aria-label="Add" className={classes.fabAdd} onClick={this.onAddButtonClicked}>
             <AddIcon />
           </Fab>
-          <Fab color="secondary" aria-label="Filter" className={classes.fabFilter} onClick={this.onFilterButtonClicked}>
+          <Fab color="secondary" aria-label="Filter Flavours" className={classes.fabFilter} onClick={this.onFilterButtonClicked}>
+            <StyleIcon />
+          </Fab>
+          <Fab color="secondary" aria-label="Filter Ingredients" className={classes.fabFilterMenu} onClick={this.onIngredientFilterButtonClicked}>
             <FilterListIcon />
           </Fab>
           {
@@ -669,6 +710,14 @@ class RecipesPageContainer extends Component {
               open={showFlavorFilterDialog} 
               onClose={this.onCardViewClosed}
               onSubmit={this.onFlavorTagRequestSubmit}
+            />
+          }
+          {
+            <IngredientFilterSelectionDialog
+              ingredients={allIngredients}
+              open={showIngredientFilterDialog}
+              onClose={this.onCardViewClosed}
+              onSubmit={this.onIngredientFilterRequestSubmit}
             />
           }
           {
@@ -749,6 +798,15 @@ const styles = theme => ({
     bottom: 0,
     right: 0,
   },
+  fabFilterMenu: {
+    marginBottom: 24,
+    marginTop: 24,
+    marginLeft: 24,
+    marginRight: 168,
+    position: 'fixed',
+    bottom: 0,
+    right: 0,
+  },
   progress: {
     top: '50%',
     left: '50%',
@@ -782,8 +840,7 @@ const mapDispatchToProps = dispatch => ({
   addToFavorite: (user) => dispatch(addToFavorite(user)),
   notify: (config) => dispatch(createNotification(config)),
   getRecommendedRecipes: (user) => dispatch(getRecommendedRecipes(user)),
-  searchRecipes: (user, filters) => dispatch(searchRecipes(user, filters)),
+  searchRecipes: (user, filters, isIng) => dispatch(searchRecipes(user, filters, isIng)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(RecipesPageContainer));
-
