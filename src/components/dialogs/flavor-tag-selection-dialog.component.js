@@ -63,7 +63,7 @@ class FlavorTagSelectionDialog extends Component {
   
     return (
       <Dialog open={open} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Select Flavor Tags</DialogTitle>
+        <DialogTitle id="form-dialog-title">Filter by Flavor Tags</DialogTitle>
         <DialogContent>
           <FlavorTagListComponent flavorTags={flavorTags} checked={checked} onFlavorTagChecked={this.onFlavorTagChecked}/>
         </DialogContent>
