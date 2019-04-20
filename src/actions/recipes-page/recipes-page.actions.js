@@ -182,11 +182,20 @@ export function deleteRecipe(id) {
 }
 
 
-export function searchRecipes(user, filters) {
-  let requestBody = {
-    user,
-    filters: filters, 
-  };
+export function searchRecipes(user, filters, isIngredientFilter) {
+  let requestBody = {};
+
+  if (isIngredientFilter) {
+    requestBody = {
+      user,
+      ingredient: { name: filters },
+    };
+  } else {
+    requestBody = {
+      user,
+      filters: filters,
+    };
+  }
 
   return (dispatch) => {
     dispatch(setRequestPending());
