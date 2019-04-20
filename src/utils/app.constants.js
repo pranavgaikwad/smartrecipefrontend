@@ -15,7 +15,7 @@ export const apiConstants = {
     addRecipe: 'cookbook?action=add_recipe',
     editRecipe: 'cookbook?action=edit_recipe',
     getRecipes: 'cookbook?action=get_recipes',
-    searchRecipes: 'cookbook?action=search_recipes',
+    searchRecipes: 'cookbook?action=search_recipes&one_more=true',
     favouriteRecipe: 'cookbook?action=add_favorites',
     getShowcaseRecipe: 'cookbook?action=get_showcase',
     getRecommendedRecipes: 'cookbook?action=recommend_recipe',
@@ -92,6 +92,7 @@ export const actionsRecipes = {
     update: "ACTION_UPDATE_RECIPE",
     search: "ACTION_SEARCH_RECIPES",
     recommend: "ACTION_GET_RECOMMEND",
+    reset: "ACTION_RESET_RECIPE",
 };
 
 // constants related to showcase actions
