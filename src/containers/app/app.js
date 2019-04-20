@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Notify } from 'react-redux-notify';
+import { Route, Router } from 'react-router-dom';
 import 'react-redux-notify/dist/ReactReduxNotify.css';
-import { Route, Router, Redirect } from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
 
