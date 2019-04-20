@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import { withStyles } from '@material-ui/core/styles';
-import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 
@@ -59,7 +58,7 @@ class RecipeShowCaseCard extends React.Component {
           }
           {
             showFlavorTags &&
-            <Typography className={classes.secondaryTitle} component="h6" variant="h6" className={classes.typography}>
+            <Typography className={classes.secondaryTitle} component="h6" variant="h6">
               Flavor Tags
             </Typography>
           }
