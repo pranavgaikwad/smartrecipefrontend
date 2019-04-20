@@ -209,6 +209,8 @@ class RecipesPageContainer extends Component {
       this.props.notify(errorNotification("Recipe must have instructions"));
       return false;
     }
+
+    return true;
   }
 
   /**
@@ -219,7 +221,6 @@ class RecipesPageContainer extends Component {
    */
   onDialogSubmit(e, recipe) {
     const { editMode } = this.state;
-
 
     const valid = this.validateRecipe(recipe);
 
