@@ -2,9 +2,9 @@ import { createNotification } from 'react-redux-notify';
 
 import { apiProxy } from '../../utils/api-proxy.service';
 import { apiConstants } from '../../utils/app.constants';
-import { actionsSignIn, actionsUser } from '../../utils/app.constants';
 import { history, menuItemProps } from '../../utils/app.constants';
 import { errorNotification } from '../../utils/notify.config'; 
+import { actionsSignIn, actionsUser, actionsRecipes } from '../../utils/app.constants';
 
 /**
  * Sets request as pending
@@ -89,8 +89,14 @@ export function signOut(email, password) {
     return { type: actionsSignIn.signout };
   }
 
+  function clearState() {
+    return { type: actionsRecipes.reset };
+  }
+
   return (dispatch) => {
+    dispatch(clearState());
     dispatch(setSignOut());
+    history.push("/");
   };
 }
 
